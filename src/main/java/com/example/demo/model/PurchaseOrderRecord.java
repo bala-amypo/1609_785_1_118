@@ -1,5 +1,6 @@
 package com.example.demo.model;
 import java.util.Date;
+import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
@@ -15,8 +16,8 @@ public class SupplierProfile{
     private Long supplierId;
     private String itemDescription;
     private Integer quantity;
-    private Boolean active=true;
-    private Date createdAt;
+    private LocalDateTime promisedDeliveryDateDate
+    private LocalDateTime issuedDate;
     public void setId(Long id){
         this.id=id;
     }
@@ -51,7 +52,7 @@ public class SupplierProfile{
     public String getItemDescription(){
         return itemDescription;
     }
-    public String getquantity(){
+    public Integer getQuantity(){
         return phone;
     }
     public Boolean getActive(){
@@ -61,12 +62,12 @@ public class SupplierProfile{
     public Date getCreatedAt(){
         return createdAt;
     }
-    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,String phone,Boolean active,Date createdAt){
+    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,Boolean active,Date createdAt){
         this.id=id;
         this.poNumber=poNumber;
         this.supplierId=supplierId;
         this.itemDescription=itemDescription;
-        this.phone=phone;
+        this.quantity=quantity;
         this.active=active;
         this.createdAt=createdAt;
     }
