@@ -59,13 +59,15 @@ public class StudentEntity{
     public Date getCreatedAt(){
         return createdAt;
     }
-    public StudentEntity(Integer id,String upplierName ,String supplierName,String email,String password,Date createdAt){
-        this.username=username;
+    public SupplierProfile(Integer id,String supplierCode,String supplierName,String email,String phone,string active,Date createdAt){
+        this.supplierCode=supplierCode;
+        this.supplierName=supplierName;
         this.email=email;
-        this.password=password;
+        this.phone=phone;
+        this.active=active;
         this.createdAt=createdAt;
     }
-    public StudentEntity(){
+    public SupplierProfile(){
 
     }
 
