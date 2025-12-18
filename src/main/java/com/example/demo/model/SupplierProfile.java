@@ -10,7 +10,7 @@ public class SupplierProfile{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String supplierCode;
-    private String supllierName;
+    private String supplierName;
     private String email;
     private String phone;
     private Boolean active;
@@ -22,7 +22,7 @@ public class SupplierProfile{
         this.supplierCode=supplierCode;
     }
     public void setSupplierName(String supplierName){
-        this.supllierName=supllierName;
+        this.supplierName=supplierName;
     }
     public void setEmail(String email){
         this.email=email;
@@ -43,7 +43,7 @@ public class SupplierProfile{
         return supplierCode;
     }
      public String getSupplierName(){
-        return suppliername;
+        return supplierName;
     }
 
     public String getEmail(){
