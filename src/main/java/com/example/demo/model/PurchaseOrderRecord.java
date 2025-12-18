@@ -55,23 +55,23 @@ public class SupplierProfile{
     public Integer getQuantity(){
         return quantity;
     }
-    public LocalDateTime getpromisedDeliveryDate(){
-        return ;
+    public LocalDateTime getPromisedDeliveryDate(){
+        return promisedDeliveryDate;
     }
    
-    public Date getCreatedAt(){
-        return createdAt;
+    public LocalDateTime getIssuedDate(){
+        return issuedDate;
     }
-    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,Boolean active,Date createdAt){
+    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,LocalDateTime promisedDeliveryDate,LocalDateTime issuedDate){
         this.id=id;
         this.poNumber=poNumber;
         this.supplierId=supplierId;
         this.itemDescription=itemDescription;
         this.quantity=quantity;
-        this.active=active;
-        this.createdAt=createdAt;
+        this.promisedDeliveryDate=promisedDeliveryDate;
+        this.issuedDate=issuedDate;
     }
-    public SupplierProfile(){
+    public PurchaseOrderRecord(){
 
     }
 
