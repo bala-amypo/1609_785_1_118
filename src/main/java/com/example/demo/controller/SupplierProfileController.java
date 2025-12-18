@@ -14,26 +14,18 @@ public class SupplierProfileController {
     public SupplierProfileController(SupplierProfileRepository repo) {
         this.repo = repo;
     }
-
-    // POST / - Create supplier
     @PostMapping
     public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
         return repo.save(supplier);
     }
-
-    // GET /{id} - Get supplier
     @GetMapping("/{id}")
     public SupplierProfile getSupplier(@PathVariable Long id) {
         return repo.findById(id).orElse(null);
     }
-
-    // GET / - List all
     @GetMapping
     public List<SupplierProfile> getAllSuppliers() {
         return repo.findAll();
     }
-
-    // PUT /{id}/status - Update status
     @PutMapping("/{id}/status")
     public SupplierProfile updateStatus(@PathVariable Long id,
                                         @RequestParam String status) {
@@ -44,8 +36,6 @@ public class SupplierProfileController {
         }
         return s;
     }
-
-    // GET /lookup/{supplierCode}
     @GetMapping("/lookup/{supplierCode}")
     public SupplierProfile lookup(@PathVariable String supplierCode) {
         return repo.findBySupplierCode(supplierCode);

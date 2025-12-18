@@ -1,10 +1,8 @@
 package com.example.demo.controller;
-
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.DeliveryRecord;
 import com.example.demo.repository.DeliveryRecordRepository;
-
 @RestController
 @RequestMapping("/api/deliveries")
 public class DeliveryRecordController {
@@ -14,26 +12,18 @@ public class DeliveryRecordController {
     public DeliveryRecordController(DeliveryRecordRepository repo) {
         this.repo = repo;
     }
-
-    // POST / - Record delivery
     @PostMapping
     public DeliveryRecord record(@RequestBody DeliveryRecord delivery) {
         return repo.save(delivery);
     }
-
-    // GET /po/{poId}
     @GetMapping("/po/{poId}")
     public List<DeliveryRecord> getByPo(@PathVariable Long poId) {
         return repo.findByPoId(poId);
     }
-
-    // GET /{id}
     @GetMapping("/{id}")
     public DeliveryRecord getOne(@PathVariable Long id) {
         return repo.findById(id).orElse(null);
     }
-
-    // GET /
     @GetMapping
     public List<DeliveryRecord> getAll() {
         return repo.findAll();
