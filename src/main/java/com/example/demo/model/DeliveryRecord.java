@@ -7,12 +7,13 @@ import jakarta.validation.constraints.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 @Entity
-public class PurchaseOrderRecord{
+public class DeliveryRecord{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String pold;
     private LocalDate actualDeliveryDate;
+    @Min(0)
     private Integer deliveredQuantity;
     private String note;
     public void setId(Long id){
@@ -27,10 +28,10 @@ public class PurchaseOrderRecord{
     public void setItemDescription(String itemDescription){
         this.itemDescription=itemDescription;
     }
-     public void setQuantity(Integer quantity){
+     public void setDeliveryQuantity(Integer deliveryquantity){
         this.quantity=quantity;
     }
-     public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate){
+     public void setPromisedDeliveredDate(LocalDate promisedDeliveredDate){
         this.promisedDeliveryDate=promisedDeliveryDate;
     }
     public void setIssuedDate(LocalDate issuedDate){
@@ -42,31 +43,27 @@ public class PurchaseOrderRecord{
     public String getPold(){
         return pold;
     }
-     public Long getSupplierId(){
-        return supplierId;
+     public LocalDate getActualDeliveryDate(){
+        return actualDeliveryDate;
     }
-
-    public String getItemDescription(){
-        return itemDescription;
+    public Integer getDeliveredQuantity(){
+        return deliveredquantity;
     }
-    public Integer getQuantity(){
-        return quantity;
-    }
-    public LocalDate getPromisedDeliveryDate(){
-        return promisedDeliveryDate;
+    public LocalDate getActualDeliveryDate(){
+        return actualDeliveryDate;
     }
    
     public String getNotes(){
         return notes;
     }
-    public PurchaseOrderRecord(Long id,String pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
+    public DeliveryRecord(Long id,String pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
         this.id=id;
         this.pold=poNumber;
         this.actualDeliveryDate=actualDeliveryDate;
         this.deliveredQuantity=deliveredquantity;
         this.notes=notes;
     }
-    public PurchaseOrderRecord(){
+    public DeliveryRecord(){
 
     }
 
