@@ -19,9 +19,9 @@ public class SupplierProfile{
         this.id=id;
     }
     public void setSupplierCode(String supplierCode){
-        this.username=username;
+        this.supplierCode=supplierCode;
     }
-    public void setSupllierName(String supllierName){
+    public void setSupplierName(String supplierName){
         this.supllierName=supllierName;
     }
     public void setEmail(String email){
@@ -30,7 +30,7 @@ public class SupplierProfile{
      public void setPhone(String phone){
         this.phone=phone;
     }
-     public void setActive(String active){
+     public void setActive(Boolean active){
         this.active=active;
     }
     public void setCreatedAt(Date createdAt){
@@ -52,14 +52,15 @@ public class SupplierProfile{
     public String getPhone(){
         return phone;
     }
-    public String getActive(){
+    public Boolean getActive(){
         return active;
     }
    
     public Date getCreatedAt(){
         return createdAt;
     }
-    public SupplierProfile(Integer id,String supplierCode,String supplierName,String email,String phone,string active,Date createdAt){
+    public SupplierProfile(Long id,String supplierCode,String supplierName,String email,String phone,Boolean active,Date createdAt){
+        this.id=id;
         this.supplierCode=supplierCode;
         this.supplierName=supplierName;
         this.email=email;
