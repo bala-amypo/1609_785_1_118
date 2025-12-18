@@ -12,7 +12,7 @@ public class SupplierProfile{
     private Long id;
     @Column(unique=true)
     private String poNumber;
-    private String supplierName;
+    private Long supplierId;
     private String email;
     private String phone;
     private Boolean active=true;
@@ -20,11 +20,11 @@ public class SupplierProfile{
     public void setId(Long id){
         this.id=id;
     }
-    public void setSupplierCode(String supplierCode){
-        this.supplierCode=supplierCode;
+    public void setPoNumber(String poNumber){
+        this.poNumber=poNumber;
     }
-    public void setSupplierName(String supplierName){
-        this.supplierName=supplierName;
+    public void setSupplierId(Long supplierId){
+        this.supplierId=supplierId;
     }
     public void setEmail(String email){
         this.email=email;
@@ -41,10 +41,10 @@ public class SupplierProfile{
     public Long getId(){
         return id;
     }
-    public String getSupplierCode(){
-        return supplierCode;
+    public String getPoNumber(){
+        return poNumber;
     }
-     public String getSupplierName(){
+     public String getSupplierId(){
         return supplierName;
     }
 
@@ -61,10 +61,10 @@ public class SupplierProfile{
     public Date getCreatedAt(){
         return createdAt;
     }
-    public SupplierProfile(Long id,String supplierCode,String supplierName,String email,String phone,Boolean active,Date createdAt){
+    public SupplierProfile(Long id,String poNumber,Long supplierId,String email,String phone,Boolean active,Date createdAt){
         this.id=id;
-        this.supplierCode=supplierCode;
-        this.supplierName=supplierName;
+        this.poNumber=poNumber;
+        this.supplierId=supplierId;
         this.email=email;
         this.phone=phone;
         this.active=active;
