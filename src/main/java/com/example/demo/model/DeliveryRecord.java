@@ -21,11 +21,11 @@ public class DeliveryRecord{
     public void setPold(Long pold){
         this.pold=pold;
     }
-     public void setActualDeliveredDate(LocalDate ActualDeliveredDate){
+     public void setActualDeliveryDate(LocalDate actualDeliveryDate){
         this.actualDeliveryDate=actualDeliveryDate;
     }
-     public void setDeliveryQuantity(Integer deliveryquantity){
-        this.quantity=quantity;
+     public void setDeliveredQuantity(Integer deliveredquantity){
+        this.deliveredquantity=deliveredquantity;
     }
     public void setNotes(Long notes){
         this.notes=notes;
