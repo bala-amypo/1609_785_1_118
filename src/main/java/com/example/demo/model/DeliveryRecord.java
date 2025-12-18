@@ -21,19 +21,19 @@ public class DeliveryRecord{
     public void setPold(Long pold){
         this.pold=pold;
     }
+     public void setActualDeliveredDate(LocalDate ActualDeliveredDate){
+        this.actualDeliveryDate=actualDeliveryDate;
+    }
      public void setDeliveryQuantity(Integer deliveryquantity){
         this.quantity=quantity;
     }
-     public void setPromisedDeliveredDate(LocalDate promisedDeliveredDate){
-        this.promisedDeliveryDate=promisedDeliveryDate;
-    }
-    public void setIssuedDate(LocalDate issuedDate){
-        this.issuedDate=issuedDate;
+    public void setPold(String pold){
+        this.notes=notes;
     }
     public Long getId(){
         return id;
     }
-    public String getPold(){
+    public Long getPold(){
         return pold;
     }
      public LocalDate getActualDeliveryDate(){
@@ -42,14 +42,11 @@ public class DeliveryRecord{
     public Integer getDeliveredQuantity(){
         return deliveredquantity;
     }
-    public LocalDate getActualDeliveryDate(){
-        return actualDeliveryDate;
-    }
    
     public String getNotes(){
         return notes;
     }
-    public DeliveryRecord(Long id,String pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
+    public DeliveryRecord(Long id,Long pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
         this.id=id;
         this.pold=poNumber;
         this.actualDeliveryDate=actualDeliveryDate;
