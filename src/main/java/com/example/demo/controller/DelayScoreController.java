@@ -16,7 +16,6 @@ public class DelayScoreController {
         this.repo = repo;
     }
 
-    // POST /compute/{poId}
     @PostMapping("/compute/{poId}")
     public DelayScoreRecord compute(@PathVariable Long poId) {
         DelayScoreRecord d = new DelayScoreRecord();
@@ -28,19 +27,17 @@ public class DelayScoreController {
         return repo.save(d);
     }
 
-    // GET /supplier/{supplierId}
     @GetMapping("/supplier/{supplierId}")
     public List<DelayScoreRecord> getBySupplier(@PathVariable Long supplierId) {
         return repo.findBySupplierId(supplierId);
     }
 
-    // GET /{id}
     @GetMapping("/{id}")
     public DelayScoreRecord getOne(@PathVariable Long id) {
         return repo.findById(id).orElse(null);
     }
 
-    // GET /
+
     @GetMapping
     public List<DelayScoreRecord> getAll() {
         return repo.findAll();
