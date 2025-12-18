@@ -24,10 +24,10 @@ public class DeliveryRecord{
      public void setActualDeliveryDate(LocalDate actualDeliveryDate){
         this.actualDeliveryDate=actualDeliveryDate;
     }
-     public void setDeliveredQuantity(Integer deliveredquantity){
-        this.deliveredquantity=deliveredquantity;
+     public void setDeliveredQuantity(Integer deliveredQuantity){
+        this.deliveredQuantity=deliveredQuantity;
     }
-    public void setNotes(Long notes){
+    public void setNotes(String notes){
         this.notes=notes;
     }
     public Long getId(){
@@ -40,17 +40,17 @@ public class DeliveryRecord{
         return actualDeliveryDate;
     }
     public Integer getDeliveredQuantity(){
-        return deliveredquantity;
+        return deliveredQuantity;
     }
    
     public String getNotes(){
         return notes;
     }
-    public DeliveryRecord(Long id,Long pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
+    public DeliveryRecord(Long id,Long pold,LocalDate actualDeliveryDate,Integer deliveredQuantity,String notes){
         this.id=id;
         this.pold=pold;
         this.actualDeliveryDate=actualDeliveryDate;
-        this.deliveredQuantity=deliveredquantity;
+        this.deliveredQuantity=deliveredQuantity;
         this.notes=notes;
     }
     public DeliveryRecord(){
