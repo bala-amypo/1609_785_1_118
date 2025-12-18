@@ -27,7 +27,7 @@ public class DeliveryRecord{
      public void setDeliveryQuantity(Integer deliveryquantity){
         this.quantity=quantity;
     }
-    public void setPold(String pold){
+    public void setNotes(Long notes){
         this.notes=notes;
     }
     public Long getId(){
@@ -48,7 +48,7 @@ public class DeliveryRecord{
     }
     public DeliveryRecord(Long id,Long pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
         this.id=id;
-        this.pold=poNumber;
+        this.pold=pold;
         this.actualDeliveryDate=actualDeliveryDate;
         this.deliveredQuantity=deliveredquantity;
         this.notes=notes;
