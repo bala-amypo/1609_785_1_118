@@ -1,6 +1,5 @@
 package com.example.demo.model;
-import java.util.Date;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
@@ -18,8 +17,8 @@ public class PurchaseOrderRecord{
     private String itemDescription;
     @Min(1)
     private Integer quantity;
-    private LocalDateTime promisedDeliveryDate;
-    private LocalDateTime issuedDate;
+    private LocalDate promisedDeliveryDate;
+    private LocalDate issuedDate;
     public void setId(Long id){
         this.id=id;
     }
@@ -35,10 +34,10 @@ public class PurchaseOrderRecord{
      public void setQuantity(Integer quantity){
         this.quantity=quantity;
     }
-     public void setProsmisedDeliveryDate(LocalDateTime promisedDeliveryDate){
+     public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate){
         this.promisedDeliveryDate=promisedDeliveryDate;
     }
-    public void setIssuedDate(LocalDateTime issuedDate){
+    public void setIssuedDate(LocalDate issuedDate){
         this.issuedDate=issuedDate;
     }
     public Long getId(){
@@ -57,14 +56,14 @@ public class PurchaseOrderRecord{
     public Integer getQuantity(){
         return quantity;
     }
-    public LocalDateTime getPromisedDeliveryDate(){
+    public LocalDate getPromisedDeliveryDate(){
         return promisedDeliveryDate;
     }
    
-    public LocalDateTime getIssuedDate(){
+    public LocalDate getIssuedDate(){
         return issuedDate;
     }
-    public PurchaseOrderRecord(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,LocalDateTime promisedDeliveryDate,LocalDateTime issuedDate){
+    public PurchaseOrderRecord(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,LocalDate promisedDeliveryDate,LocalDate issuedDate){
         this.id=id;
         this.poNumber=poNumber;
         this.supplierId=supplierId;
