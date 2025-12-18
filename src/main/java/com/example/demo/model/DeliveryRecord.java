@@ -10,7 +10,7 @@ public class DeliveryRecord{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    private Long pold;
+    private Long poId;
     private LocalDate actualDeliveryDate;
     @Min(0)
     private Integer deliveredQuantity;
@@ -18,8 +18,8 @@ public class DeliveryRecord{
     public void setId(Long id){
         this.id=id;
     }
-    public void setPold(Long pold){
-        this.pold=pold;
+    public void setPold(Long poId){
+        this.poId=poId;
     }
      public void setActualDeliveryDate(LocalDate actualDeliveryDate){
         this.actualDeliveryDate=actualDeliveryDate;
@@ -33,8 +33,8 @@ public class DeliveryRecord{
     public Long getId(){
         return id;
     }
-    public Long getPold(){
-        return pold;
+    public Long getPoId(){
+        return poId;
     }
      public LocalDate getActualDeliveryDate(){
         return actualDeliveryDate;
@@ -46,9 +46,9 @@ public class DeliveryRecord{
     public String getNotes(){
         return notes;
     }
-    public DeliveryRecord(Long id,Long pold,LocalDate actualDeliveryDate,Integer deliveredQuantity,String notes){
+    public DeliveryRecord(Long id,Long poId,LocalDate actualDeliveryDate,Integer deliveredQuantity,String notes){
         this.id=id;
-        this.pold=pold;
+        this.poId=poId;
         this.actualDeliveryDate=actualDeliveryDate;
         this.deliveredQuantity=deliveredQuantity;
         this.notes=notes;
