@@ -33,11 +33,11 @@ public class SupplierProfile{
      public void setQuantity(Integer quantity){
         this.quantity=quantity;
     }
-     public void setActive(Boolean active){
-        this.active=active;
+     public void setProsmisedDeliveryDate(LocalDateTime promisedDeliveryDate){
+        this.promisedDeliveryDate=promisedDeliveryDate;
     }
-    public void setCreatedAt(Date createdAt){
-        this.createdAt=createdAt;
+    public void setIssuedDate(LocalDateTime issuedDate){
+        this.issuedDate=issuedDate;
     }
     public Long getId(){
         return id;
@@ -53,10 +53,10 @@ public class SupplierProfile{
         return itemDescription;
     }
     public Integer getQuantity(){
-        return phone;
+        return quantity;
     }
-    public Boolean getActive(){
-        return active;
+    public LocalDateTime getpromisedDeliveryDate(){
+        return ;
     }
    
     public Date getCreatedAt(){
