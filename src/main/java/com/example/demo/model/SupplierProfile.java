@@ -1,11 +1,11 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 @Entity
-public class StudentEntity{
+public class SupplierProfile{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +15,7 @@ public class StudentEntity{
     private String phone;
     private Boolean active;
     private Date createdAt;
-    public void setId(Integer id){
+    public void setId(Long id){
         this.id=id;
     }
     public void setSupplierCode(String supplierCode){
@@ -36,7 +36,7 @@ public class StudentEntity{
     public void setCreatedAt(Date createdAt){
         this.createdAt=createdAt;
     }
-    public Integer getId(){
+    public Long getId(){
         return id;
     }
     public String getSupplierCode(){
