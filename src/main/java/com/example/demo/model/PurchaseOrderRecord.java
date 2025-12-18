@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.Min;
+import jakarta.validation.constraints.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 @Entity
@@ -18,7 +18,7 @@ public class PurchaseOrderRecord{
     private String itemDescription;
     @Min(1)
     private Integer quantity;
-    private LocalDateTime promisedDeliveryDateDate
+    private LocalDateTime promisedDeliveryDate;
     private LocalDateTime issuedDate;
     public void setId(Long id){
         this.id=id;
@@ -47,7 +47,7 @@ public class PurchaseOrderRecord{
     public String getPoNumber(){
         return poNumber;
     }
-     public String getSupplierId(){
+     public Long getSupplierId(){
         return supplierId;
     }
 
