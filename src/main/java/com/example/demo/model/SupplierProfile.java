@@ -18,15 +18,20 @@ public class StudentEntity{
     public void setId(Integer id){
         this.id=id;
     }
-    public void setsupplierCode(String supplierCode){
+    public void setSupplierCode(String supplierCode){
         this.username=username;
     }
-    
+    public void setSupllierName(String supllierName){
+        this.supllierName=supllierName;
+    }
     public void setEmail(String email){
         this.email=email;
     }
-     public void setPassword(String password){
-        this.password=password;
+     public void setPhone(String phone){
+        this.phone=phone;
+    }
+     public void setActive(String active){
+        this.active=active;
     }
     public void setCreatedAt(Date createdAt){
         this.createdAt=createdAt;
@@ -34,8 +39,8 @@ public class StudentEntity{
     public Integer getId(){
         return id;
     }
-    public String getUsername(){
-        return username;
+    public String getSupplierCode(){
+        return supplierCode;
     }
     public String getEmail(){
         return email;
