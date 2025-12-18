@@ -13,8 +13,8 @@ public class SupplierProfile{
     @Column(unique=true)
     private String poNumber;
     private Long supplierId;
-    private String email;
-    private String phone;
+    private String itemDescription;
+    private Integer quantity;
     private Boolean active=true;
     private Date createdAt;
     public void setId(Long id){
@@ -26,11 +26,11 @@ public class SupplierProfile{
     public void setSupplierId(Long supplierId){
         this.supplierId=supplierId;
     }
-    public void setEmail(String email){
-        this.email=email;
+    public void setItemDescription(String itemDescription){
+        this.itemDescription=itemDescription;
     }
-     public void setPhone(String phone){
-        this.phone=phone;
+     public void setQuantity(Integer quantity){
+        this.quantity=quantity;
     }
      public void setActive(Boolean active){
         this.active=active;
@@ -45,13 +45,13 @@ public class SupplierProfile{
         return poNumber;
     }
      public String getSupplierId(){
-        return supplierName;
+        return supplierId;
     }
 
-    public String getEmail(){
-        return email;
+    public String getItemDescription(){
+        return itemDescription;
     }
-    public String getPhone(){
+    public String getquantity(){
         return phone;
     }
     public Boolean getActive(){
@@ -61,11 +61,11 @@ public class SupplierProfile{
     public Date getCreatedAt(){
         return createdAt;
     }
-    public SupplierProfile(Long id,String poNumber,Long supplierId,String email,String phone,Boolean active,Date createdAt){
+    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,String phone,Boolean active,Date createdAt){
         this.id=id;
         this.poNumber=poNumber;
         this.supplierId=supplierId;
-        this.email=email;
+        this.itemDescription=itemDescription;
         this.phone=phone;
         this.active=active;
         this.createdAt=createdAt;
