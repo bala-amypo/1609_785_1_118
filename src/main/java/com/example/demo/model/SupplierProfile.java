@@ -9,11 +9,12 @@ public class SupplierProfile{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    @Column(unique=true)
     private String supplierCode;
     private String supplierName;
     private String email;
     private String phone;
-    private Boolean active;
+    private Boolean active=true;
     private Date createdAt;
     public void setId(Long id){
         this.id=id;
@@ -31,7 +32,7 @@ public class SupplierProfile{
         this.phone=phone;
     }
      public void setActive(Boolean active){
-        this.active=active;
+        this.active=true;
     }
     public void setCreatedAt(Date createdAt){
         this.createdAt=createdAt;
