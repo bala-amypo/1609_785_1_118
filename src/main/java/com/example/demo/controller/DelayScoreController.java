@@ -1,6 +1,48 @@
-package example.com.controller;
-import org.springfarmework.web.bind.annotation.RestController;
+package com.example.demo.controller;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import com.example.demo.model.DelayScoreRecord;
+import com.example.demo.repository.DelayScoreRecordRepository;
+
 @RestController
-public class DelayScoreController{
-    
+@RequestMapping("/api/delay-scores")
+public class DelayScoreController {
+
+    private DelayScoreRecordRepository repo;
+
+    public DelayScoreController(DelayScoreRecordRepository repo) {
+        this.repo = repo;
+    }
+
+    // POST /compute/{poId}
+    @PostMapping("/compute/{poId}")
+    public DelayScoreRecord compute(@PathVariable Long poId) {
+        DelayScoreRecord d = new DelayScoreRecord();
+        d.setPoId(poId);
+        d.setDelayDays(2);
+        d.setDelaySeverity("MINOR");
+        d.setScore(8.5);
+        d.setComputedAt(LocalDateTime.now());
+        return repo.save(d);
+    }
+
+    // GET /supplier/{supplierId}
+    @GetMapping("/supplier/{supplierId}")
+    public List<DelayScoreRecord> getBySupplier(@PathVariable Long supplierId) {
+        return repo.findBySupplierId(supplierId);
+    }
+
+    // GET /{id}
+    @GetMapping("/{id}")
+    public DelayScoreRecord getOne(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    // GET /
+    @GetMapping
+    public List<DelayScoreRecord> getAll() {
+        return repo.findAll();
+    }
 }
