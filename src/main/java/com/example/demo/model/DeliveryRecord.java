@@ -2,6 +2,7 @@ package com.example.demo.model;
 import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +11,7 @@ public class DeliveryRecord{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
     private Long poId;
     private LocalDate actualDeliveryDate;
     @Min(0)
@@ -18,7 +20,7 @@ public class DeliveryRecord{
     public void setId(Long id){
         this.id=id;
     }
-    public void setPold(Long poId){
+    public void setPoId(Long poId){
         this.poId=poId;
     }
      public void setActualDeliveryDate(LocalDate actualDeliveryDate){
