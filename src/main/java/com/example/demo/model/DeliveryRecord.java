@@ -2,7 +2,6 @@ package com.example.demo.model;
 import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,22 +10,16 @@ public class DeliveryRecord{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    private String pold;
+    private Long pold;
     private LocalDate actualDeliveryDate;
     @Min(0)
     private Integer deliveredQuantity;
-    private String note;
+    private String notes;
     public void setId(Long id){
         this.id=id;
     }
-    public void setPold(String pold){
+    public void setPold(Long pold){
         this.pold=pold;
-    }
-    public void setSupplierId(Long supplierId){
-        this.supplierId=supplierId;
-    }
-    public void setItemDescription(String itemDescription){
-        this.itemDescription=itemDescription;
     }
      public void setDeliveryQuantity(Integer deliveryquantity){
         this.quantity=quantity;
