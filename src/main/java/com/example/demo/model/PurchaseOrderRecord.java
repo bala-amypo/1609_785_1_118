@@ -1,5 +1,5 @@
 package com.example.demo.model;
-import jaskarta.peristence.Entity;
+import jakarta.peristence.Entity;
 @Entity
 public class PurchaseOrderRecord{
     
