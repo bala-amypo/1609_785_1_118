@@ -56,16 +56,15 @@ public class PurchaseOrderRecord{
         return promisedDeliveryDate;
     }
    
-    public LocalDate getIssuedDate(){
-        return issuedDate;
+    public String getNotes(){
+        return notes;
     }
-    public PurchaseOrderRecord(Long id,String pold,Long supplierId,String itemDescription,Integer quantity,LocalDate promisedDeliveryDate,LocalDate issuedDate){
+    public PurchaseOrderRecord(Long id,String pold,LocalDate actualDeliveryDate,Integer deliveredquantity,String notes){
         this.id=id;
         this.pold=poNumber;
-        this.supplierId=supplierId;
-        this.quantity=quantity;
-        this.promisedDeliveryDate=promisedDeliveryDate;
-        this.issuedDate=issuedDate;
+        this.actualDeliveryDate=actualDeliveryDate;
+        this.deliveredQuantity=deliveredquantity;
+        this.notes=notes;
     }
     public PurchaseOrderRecord(){
 
