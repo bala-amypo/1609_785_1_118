@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 @Entity
-public class SupplierProfile{
+public class PurchaseOrderRecord{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -15,6 +16,7 @@ public class SupplierProfile{
     private String poNumber;
     private Long supplierId;
     private String itemDescription;
+    @Min(1)
     private Integer quantity;
     private LocalDateTime promisedDeliveryDateDate
     private LocalDateTime issuedDate;
@@ -62,7 +64,7 @@ public class SupplierProfile{
     public LocalDateTime getIssuedDate(){
         return issuedDate;
     }
-    public SupplierProfile(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,LocalDateTime promisedDeliveryDate,LocalDateTime issuedDate){
+    public PurchaseOrderRecord(Long id,String poNumber,Long supplierId,String itemDescription,Integer quantity,LocalDateTime promisedDeliveryDate,LocalDateTime issuedDate){
         this.id=id;
         this.poNumber=poNumber;
         this.supplierId=supplierId;
