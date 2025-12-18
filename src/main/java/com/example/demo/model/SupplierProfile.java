@@ -13,13 +13,15 @@ public class StudentEntity{
     private String supllierName;
     private String email;
     private String phone;
-    private String phone;
+    private Boolean active;
+    private Date createdAt;
     public void setId(Integer id){
         this.id=id;
     }
-    public void setUsername(String username){
+    public void setsupplierCode(String supplierCode){
         this.username=username;
     }
+    
     public void setEmail(String email){
         this.email=email;
     }
