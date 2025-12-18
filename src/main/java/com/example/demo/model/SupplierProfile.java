@@ -33,7 +33,7 @@ public class SupplierProfile{
         this.phone=phone;
     }
      public void setActive(Boolean active){
-        this.active=true;
+        this.active=active;
     }
     public void setCreatedAt(Date createdAt){
         this.createdAt=createdAt;
