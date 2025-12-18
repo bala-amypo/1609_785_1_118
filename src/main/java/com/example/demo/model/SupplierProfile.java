@@ -42,17 +42,24 @@ public class StudentEntity{
     public String getSupplierCode(){
         return supplierCode;
     }
+     public String getSupplierName(){
+        return suppliername;
+    }
+
     public String getEmail(){
         return email;
     }
-    public String getPassword(){
-        return password;
+    public String getPhone(){
+        return phone;
+    }
+    public String getActive(){
+        return active;
     }
    
     public Date getCreatedAt(){
         return createdAt;
     }
-    public StudentEntity(Integer id,String username,String email,String password,Date createdAt){
+    public StudentEntity(Integer id,String upplierName ,String supplierName,String email,String password,Date createdAt){
         this.username=username;
         this.email=email;
         this.password=password;
