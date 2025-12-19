@@ -2,8 +2,10 @@ package com.example.demo.repository;
 
 import com.example.demo.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-@Repository
+import java.util.Optional;
+
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+    Optional<AppUser> findByUsername(String username);
     AppUser findByEmail(String email);
-    boolean existsByEmail(String email); 
+    boolean existsByEmail(String email);
 }
