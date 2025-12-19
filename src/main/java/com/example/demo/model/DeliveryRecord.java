@@ -46,7 +46,7 @@ public class DeliveryRecord{
     }
    
     public String getNotes(){
-        return notes; 
+        return notes;  
     }
     public DeliveryRecord(Long id,Long poId,LocalDate actualDeliveryDate,Integer deliveredQuantity,String notes){
         this.id=id;
