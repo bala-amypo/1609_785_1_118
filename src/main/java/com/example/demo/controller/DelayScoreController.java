@@ -1,7 +1,10 @@
 package com.example.demo.controller;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
+
 import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.repository.DelayScoreRecordRepository;
 
@@ -9,7 +12,7 @@ import com.example.demo.repository.DelayScoreRecordRepository;
 @RequestMapping("/api/delay-scores")
 public class DelayScoreController {
 
-    private DelayScoreRecordRepository repo;
+    private final DelayScoreRecordRepository repo;
 
     public DelayScoreController(DelayScoreRecordRepository repo) {
         this.repo = repo;
@@ -25,17 +28,6 @@ public class DelayScoreController {
         d.setComputedAt(LocalDateTime.now());
         return repo.save(d);
     }
-
-    @GetMapping("/supplier/{supplierId}")
-    public List<DelayScoreRecord> getBySupplier(@PathVariable Long supplierId) {
-        return repo.findBySupplierId(supplierId);
-    }
-
-    @GetMapping("/{id}")
-    public DelayScoreRecord getOne(@PathVariable Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
 
     @GetMapping
     public List<DelayScoreRecord> getAll() {

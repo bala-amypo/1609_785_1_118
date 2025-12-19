@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
+
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 
@@ -9,35 +11,30 @@ import com.example.demo.repository.SupplierProfileRepository;
 @RequestMapping("/api/suppliers")
 public class SupplierProfileController {
 
-    private SupplierProfileRepository repo;
+    private final SupplierProfileRepository repo;
 
     public SupplierProfileController(SupplierProfileRepository repo) {
         this.repo = repo;
     }
+
     @PostMapping
-    public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
+    public SupplierProfile create(@RequestBody SupplierProfile supplier) {
         return repo.save(supplier);
     }
-    @GetMapping("/{id}")
-    public SupplierProfile getSupplier(@PathVariable Long id) {
-        return repo.findById(id).orElse(null);
-    }
+
     @GetMapping
-    public List<SupplierProfile> getAllSuppliers() {
+    public List<SupplierProfile> getAll() {
         return repo.findAll();
     }
+
     @PutMapping("/{id}/status")
     public SupplierProfile updateStatus(@PathVariable Long id,
-                                        @RequestParam String status) {
+                                        @RequestParam Boolean active) {
         SupplierProfile s = repo.findById(id).orElse(null);
         if (s != null) {
-            s.setStatus(status);
+            s.setActive(active);
             repo.save(s);
         }
         return s;
-    }
-    @GetMapping("/lookup/{supplierCode}")
-    public SupplierProfile lookup(@PathVariable String supplierCode) {
-        return repo.findBySupplierCode(supplierCode);
     }
 }

@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DeliveryRecord;
-import com.example.demo.service.DeliveryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.service.DeliveryRecordService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,26 +10,24 @@ import java.util.List;
 @RequestMapping("/api/deliveries")
 public class DeliveryController {
 
-    @Autowired
-    private DeliveryService service;
+    private final DeliveryRecordService service;
+
+    public DeliveryController(DeliveryRecordService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public List<DeliveryRecord> getAllDeliveries() {
         return service.getAllDeliveries();
     }
 
-    @GetMapping("/po/{poId}")
-    public List<DeliveryRecord> getDeliveriesByPoId(@PathVariable Long poId) {
-        return service.getDeliveriesByPoId(poId);
-    }
-
     @GetMapping("/{id}")
-    public DeliveryRecord getDeliveryById(@PathVariable Long id) {
+    public DeliveryRecord getById(@PathVariable Long id) {
         return service.getDeliveryById(id);
     }
 
     @PostMapping
-    public DeliveryRecord createDelivery(@RequestBody DeliveryRecord delivery) {
-        return service.saveDelivery(delivery);
+    public DeliveryRecord create(@RequestBody DeliveryRecord delivery) {
+        return service.recordDelivery(delivery);
     }
 }
