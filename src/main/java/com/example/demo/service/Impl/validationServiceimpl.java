@@ -20,7 +20,7 @@ public class validationServiceimpl implements validationService{
     }
     // @Override
    
-    public List<validationEntity>getdata(){
+    // public List<validationEntity>getdata(){
     //     return valid.findAll();
     // }
     // @Override
@@ -31,16 +31,15 @@ public class validationServiceimpl implements validationService{
     @Override
     public validationEntity putgetdata(long id){
        return valid.findById(id).orElseThrow()->new ValidationException(null);
-    
     }
-    @Override
-    public validationEntity putupdatedata(long id,validationEntity std){
-        if(valid.existsById(id)){//checking where it isprsent or not in spfici row
-            std.setId(id);//settting the value to that roe
-            return valid.save(std);//return the value
-        }
-        return null;
-    }
+//     @Override
+//     public validationEntity putupdatedata(long id,validationEntity std){
+//         if(valid.existsById(id)){//checking where it isprsent or not in spfici row
+//             std.setId(id);//settting the value to that roe
+//             return valid.save(std);//return the value
+//         }
+//         return null;
+//     }
    
 
-}
+// }/
