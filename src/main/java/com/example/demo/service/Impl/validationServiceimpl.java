@@ -18,15 +18,16 @@ public class validationServiceimpl implements validationService{
     public validationEntity postdata(validationEntity stu){
         return valid.save(stu);
     }
-    @Override
+    // @Override
+   
     public List<validationEntity>getdata(){
-        return valid.findAll();
-    }
-    @Override
-    public String deletedata(long id){
-        valid.deleteById(id);
-        return "deleted successfully";
-    }
+    //     return valid.findAll();
+    // }
+    // @Override
+    // public String deletedata(long id){
+    //     valid.deleteById(id);
+    //     return "deleted successfully";
+    // }
     @Override
     public validationEntity putgetdata(long id){
        return valid.findById(id).orElseThrow()->new ValidationException(null);
