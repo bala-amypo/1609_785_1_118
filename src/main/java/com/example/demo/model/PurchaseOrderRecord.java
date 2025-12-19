@@ -1,9 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -20,7 +18,4 @@ public class PurchaseOrderRecord {
     private String productName;
     private int quantity;
     private LocalDate orderDate;
-
-    @ManyToOne
-    private AppUser user; // link order to user
 }
