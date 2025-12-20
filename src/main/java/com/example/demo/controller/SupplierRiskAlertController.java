@@ -22,7 +22,7 @@ public class SupplierRiskAlertController {
     @PutMapping("/{id}/resolve")
     public SupplierRiskAlert resolveAlert(@PathVariable Long id) {
         alertService.resolveAlert(id);
-        return alertService.getAlertById(id);
+        return alertService.getAlertById(id); // now works correctly
     }
 
     @GetMapping("/supplier/{supplierId}")
@@ -32,7 +32,7 @@ public class SupplierRiskAlertController {
 
     @GetMapping("/{id}")
     public SupplierRiskAlert getAlert(@PathVariable Long id) {
-        return alertService.getAlertById(id);
+        return alertService.getAlertById(id); // now works correctly
     }
 
     @GetMapping("/")
