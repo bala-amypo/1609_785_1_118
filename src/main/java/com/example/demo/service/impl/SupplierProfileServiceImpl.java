@@ -9,17 +9,33 @@ import java.util.List;
 
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-    @Autowired 
-    private SupplierProfileRepository repository;
-    @Override 
-    public SupplierProfile createSupplier(SupplierProfile s) { 
-        return repository.save(s); 
-        }
-    @Override 
-    public SupplierProfile getSupplierById(Long id) { 
-        return repository.findById(id).orElse(null); 
-        }
-    @Override public List<SupplierProfile> getAllSuppliers() { 
-        return repository.findAll(); 
-        }
+    @Autowired private SupplierProfileRepository supplierRepo;
+
+    @Override
+    public SupplierProfile createSupplier(SupplierProfile supplier) {
+        return supplierRepo.save(supplier);
+    }
+
+    @Override
+    public SupplierProfile getSupplierById(Long id) {
+        return supplierRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Supplier not found")); // Requirement
+    }
+
+    @Override
+    public SupplierProfile getBySupplierCode(String supplierCode) {
+        return supplierRepo.findBySupplierCode(supplierCode);
+    }
+
+    @Override
+    public List<SupplierProfile> getAllSuppliers() {
+        return supplierRepo.findAll();
+    }
+
+    @Override
+    public void updateSupplierStatus(Long id, boolean active) {
+        SupplierProfile supplier = getSupplierById(id);
+        supplier.setActive(active);
+        supplierRepo.save(supplier);
+    }
 }
