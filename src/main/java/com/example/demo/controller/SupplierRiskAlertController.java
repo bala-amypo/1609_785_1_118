@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SupplierRiskAlert;
-import com.example.demo.repository.SupplierRiskAlertRepository;
+import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,32 +12,36 @@ import java.util.List;
 public class SupplierRiskAlertController {
 
     @Autowired
-    private SupplierRiskAlertRepository alertRepo;
+    private SupplierRiskAlertService alertService;
 
     @PostMapping("/")
     public SupplierRiskAlert createAlert(@RequestBody SupplierRiskAlert alert) {
-        return alertRepo.save(alert);
+        return alertService.createAlert(alert);
     }
 
     @PutMapping("/{id}/resolve")
     public SupplierRiskAlert resolveAlert(@PathVariable Long id) {
-        SupplierRiskAlert alert = alertRepo.findById(id).orElseThrow();
-        alert.setResolved(true);   // ✅ FIXED
-        return alertRepo.save(alert);
+        alertService.resolveAlert(id);
+        return alertService.getAlertById(id);
     }
 
     @GetMapping("/supplier/{supplierId}")
     public List<SupplierRiskAlert> getAlertsBySupplier(@PathVariable Long supplierId) {
-        return alertRepo.findBySupplierId(supplierId);
+        return alertService.getAlertsBySupplier(supplierId);
     }
 
     @GetMapping("/{id}")
     public SupplierRiskAlert getAlert(@PathVariable Long id) {
-        return alertRepo.findById(id).orElseThrow();
+        return alertService.getAlertById(id);
     }
 
     @GetMapping("/")
     public List<SupplierRiskAlert> listAll() {
-        return alertRepo.findAll();
+        return alertService.getAllAlerts();
+    }
+
+    @GetMapping("/unresolved")
+    public List<SupplierRiskAlert> getUnresolvedAlerts() {
+        return alertService.getUnresolvedAlerts();
     }
 }
