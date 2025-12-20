@@ -11,17 +11,24 @@ import java.util.List;
 
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
-    @Autowired private PurchaseOrderRecordRepository poRepo;
-    @Autowired private SupplierProfileRepository supplierRepo;
+
+    @Autowired
+    private PurchaseOrderRecordRepository poRepo;
+
+    @Autowired
+    private SupplierProfileRepository supplierRepo;
 
     @Override
     public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
+        // Requirement: Validate supplier ID exists
         SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
-            .orElseThrow(() -> new RuntimeException("Invalid supplierId")); // Requirement
-        
+                .orElseThrow(() -> new RuntimeException("Invalid supplierId"));
+
+        // Requirement: Validate supplier must be active
         if (!supplier.getActive()) {
-            throw new RuntimeException("must be active"); // Requirement
+            throw new RuntimeException("must be active");
         }
+
         return poRepo.save(po);
     }
 
