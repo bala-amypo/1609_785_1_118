@@ -1,28 +1,25 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.AppUser;
-import com.example.demo.service.AppUserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@Tag(name = "AuthController")
+@RequestMapping("/auth")
 public class AuthController {
+
     @Autowired
-    private AppUserService service;
+    private AuthService authService; // Changed from AppUserService to AuthService
 
     @PostMapping("/register")
     public AppUser register(@RequestBody AppUser user) {
-        return service.registerUser(user);
+        return authService.registerUser(user);
     }
-    
+
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
-        return "Login logic involves JWT generation based on Security context";
+        // Placeholder logic
+        return "Login Successful";
     }
 }

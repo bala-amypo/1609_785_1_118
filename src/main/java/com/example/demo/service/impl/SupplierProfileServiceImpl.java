@@ -9,7 +9,9 @@ import java.util.List;
 
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
-    @Autowired private SupplierProfileRepository supplierRepo;
+
+    @Autowired
+    private SupplierProfileRepository supplierRepo;
 
     @Override
     public SupplierProfile createSupplier(SupplierProfile supplier) {
@@ -18,8 +20,9 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
+        // Fixes the Optional conversion error
         return supplierRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Supplier not found")); // Requirement
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
     @Override
