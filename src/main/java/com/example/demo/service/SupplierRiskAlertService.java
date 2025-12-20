@@ -8,5 +8,6 @@ public interface SupplierRiskAlertService {
     void resolveAlert(Long id);
     List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId);
     List<SupplierRiskAlert> getAllAlerts();
-    List<SupplierRiskAlert> getUnresolvedAlerts(); // optional but useful
+    List<SupplierRiskAlert> getUnresolvedAlerts();
+    SupplierRiskAlert getAlertById(Long id); // Added for controller
 }
