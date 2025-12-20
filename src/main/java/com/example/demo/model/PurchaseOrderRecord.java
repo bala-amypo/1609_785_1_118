@@ -6,56 +6,83 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-public class SupplierProfile {
+public class PurchaseOrderRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String supplierCode;
+    private String poNumber;
 
-    private String supplierName;
-    private String email;
-    private String phone;
-    private Boolean active;
-    private LocalDateTime createdAt;
+    private Long supplierId;
+    private String itemDescription;
+    private Integer quantity;
+    private LocalDate promisedDeliveryDate;
+    private LocalDate issuedDate;
 
-    public SupplierProfile() {
-        this.active = true;
-        this.createdAt = LocalDateTime.now();
+    // ✅ Default constructor
+    public PurchaseOrderRecord() {
     }
 
-    public SupplierProfile(String supplierCode, String supplierName,
-                           String email, String phone) {
-        this.supplierCode = supplierCode;
-        this.supplierName = supplierName;
-        this.email = email;
-        this.phone = phone;
-        this.active = true;
-        this.createdAt = LocalDateTime.now();
+    // ✅ Parameterized constructor
+    public PurchaseOrderRecord(
+            String poNumber,
+            Long supplierId,
+            Integer quantity,
+            LocalDate promisedDeliveryDate
+    ) {
+        this.poNumber = poNumber;
+        this.supplierId = supplierId;
+        this.quantity = quantity;
+        this.promisedDeliveryDate = promisedDeliveryDate;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ✅ Getters & Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getSupplierCode() { return supplierCode; }
-    public void setSupplierCode(String supplierCode) { this.supplierCode = supplierCode; }
+    public String getPoNumber() {
+        return poNumber;
+    }
 
-    public String getSupplierName() { return supplierName; }
-    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
+    public void setPoNumber(String poNumber) {
+        this.poNumber = poNumber;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Long getSupplierId() {
+        return supplierId;
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public LocalDate getPromisedDeliveryDate() {
+        return promisedDeliveryDate;
+    }
+
+    public void setPromisedDeliveryDate(LocalDate promisedDeliveryDate) {
+        this.promisedDeliveryDate = promisedDeliveryDate;
+    }
+
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
 }
