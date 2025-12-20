@@ -15,28 +15,29 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        // Requirement: Save a new risk alert
         return alertRepo.save(alert);
     }
 
     @Override
     public void resolveAlert(Long id) {
-        // Requirement: Logic to change alert status to "RESOLVED"
         SupplierRiskAlert alert = alertRepo.findById(id)
             .orElseThrow(() -> new RuntimeException("Alert not found"));
-        alert.setStatus("RESOLVED");
+        alert.setResolved(true); // corrected
         alertRepo.save(alert);
     }
 
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        // Requirement: Get all alerts for a specific supplier
         return alertRepo.findBySupplierId(supplierId);
     }
 
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
-        // Requirement: List all alerts in the system
         return alertRepo.findAll();
+    }
+
+    @Override
+    public List<SupplierRiskAlert> getUnresolvedAlerts() {
+        return alertRepo.findByResolved(false);
     }
 }
