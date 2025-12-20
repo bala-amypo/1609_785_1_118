@@ -14,14 +14,20 @@ public class SupplierRiskAlert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String supplierCode;
+    @Column(nullable = false)
+    private Long supplierId;
 
-    private String riskType;
+    @Column(nullable = false)
+    private String alertLevel; // LOW / MEDIUM / HIGH
+
+    @Column(nullable = false)
+    private String message;
+
+    @Column(nullable = false)
+    private LocalDateTime alertDate = LocalDateTime.now();
 
     @Column(nullable = false)
     private Boolean resolved = false;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     public SupplierRiskAlert() {}
 
@@ -33,20 +39,36 @@ public class SupplierRiskAlert {
         this.id = id;
     }
 
-    public String getSupplierCode() {
-        return supplierCode;
+    public Long getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplierCode(String supplierCode) {
-        this.supplierCode = supplierCode;
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
-    public String getRiskType() {
-        return riskType;
+    public String getAlertLevel() {
+        return alertLevel;
     }
 
-    public void setRiskType(String riskType) {
-        this.riskType = riskType;
+    public void setAlertLevel(String alertLevel) {
+        this.alertLevel = alertLevel;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getAlertDate() {
+        return alertDate;
+    }
+
+    public void setAlertDate(LocalDateTime alertDate) {
+        this.alertDate = alertDate;
     }
 
     public Boolean getResolved() {
@@ -55,9 +77,5 @@ public class SupplierRiskAlert {
 
     public void setResolved(Boolean resolved) {
         this.resolved = resolved;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }
