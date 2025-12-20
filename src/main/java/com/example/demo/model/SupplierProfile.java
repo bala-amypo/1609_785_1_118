@@ -18,7 +18,9 @@ public class SupplierProfile {
 
     public SupplierProfile() {}
 
-    public Long getId() { return id; }
+    public Long getId() { 
+        return id; 
+        }
     public void setId(Long id) { this.id = id; }
     public String getSupplierCode() { return supplierCode; }
     public void setSupplierCode(String code) { this.supplierCode = code; }
