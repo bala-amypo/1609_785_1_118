@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
@@ -16,10 +19,8 @@ public class PurchaseOrderRecord {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public String getPoNumber() { return poNumber; }
-    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
     public Long getSupplierId() { return supplierId; }
-    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+    public void setSupplierId(Long id) { this.supplierId = id; }
     public LocalDate getPromisedDeliveryDate() { return promisedDeliveryDate; }
-    public void setPromisedDeliveryDate(LocalDate date) { this.promisedDeliveryDate = date; }
+    public void setPromisedDeliveryDate(LocalDate d) { this.promisedDeliveryDate = d; }
 }

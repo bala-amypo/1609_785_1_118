@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class DelayScoreRecord {
@@ -15,11 +18,9 @@ public class DelayScoreRecord {
 
     public DelayScoreRecord() {}
 
-    public void setPoId(Long poId) { this.poId = poId; }
-    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
-    public void setDelayDays(Integer delayDays) { this.delayDays = delayDays; }
-    public void setDelaySeverity(String delaySeverity) { this.delaySeverity = delaySeverity; }
-    public void setScore(Double score) { this.score = score; }
-    public Long getSupplierId() { return supplierId; }
-    public Double getScore() { return score; }
+    public void setSupplierId(Long id) { this.supplierId = id; }
+    public void setPoId(Long id) { this.poId = id; }
+    public void setDelayDays(Integer d) { this.delayDays = d; }
+    public void setDelaySeverity(String s) { this.delaySeverity = s; }
+    public void setScore(Double s) { this.score = s; }
 }

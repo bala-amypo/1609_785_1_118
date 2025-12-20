@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
@@ -13,10 +16,8 @@ public class DeliveryRecord {
 
     public DeliveryRecord() {}
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
     public Long getPoId() { return poId; }
     public void setPoId(Long poId) { this.poId = poId; }
     public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
-    public void setActualDeliveryDate(LocalDate actualDeliveryDate) { this.actualDeliveryDate = actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDate d) { this.actualDeliveryDate = d; }
 }
