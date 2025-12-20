@@ -1,21 +1,22 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-public class SupplierProfile {
+public class DeliveryRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String supplierName;
-    private Boolean active;
+    private Long poId;
+    private LocalDate actualDeliveryDate;
 
-    public SupplierProfile() {}
+    public DeliveryRecord() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public String getSupplierName() { return supplierName; }
-    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
+    public LocalDate getActualDeliveryDate() { return actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) { this.actualDeliveryDate = actualDeliveryDate; }
 }
