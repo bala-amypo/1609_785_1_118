@@ -4,6 +4,8 @@ import com.example.demo.model.DeliveryRecord;
 import java.util.List;
 
 public interface DeliveryRecordService {
-    DeliveryRecord addDelivery(DeliveryRecord delivery);
-    List<DeliveryRecord> getDeliveriesByPoId(Long poId);
+    DeliveryRecord recordDelivery(DeliveryRecord delivery);
+    List<DeliveryRecord> getDeliveriesByPO(Long poId);
+    DeliveryRecord getDeliveryById(Long id);
+    List<DeliveryRecord> getAllDeliveries();
 }
