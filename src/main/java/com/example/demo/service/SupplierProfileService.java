@@ -1,12 +1,35 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.SupplierProfile;
+import com.example.demo.repository.SupplierProfileRepository;
+import com.example.demo.service.SupplierProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
-public interface SupplierProfileService {
-    SupplierProfile createSupplier(SupplierProfile supplier);
-    SupplierProfile getSupplierById(Long id);
-    SupplierProfile getBySupplierCode(String supplierCode);
-    List<SupplierProfile> getAllSuppliers();
-    void updateSupplierStatus(Long id, boolean active);
+@Service
+public class SupplierProfileServiceImpl implements SupplierProfileService {
+    @Autowired 
+    private SupplierProfileRepository supplierRepo;
+
+    @Override
+    public SupplierProfile getSupplierById(Long id) {
+        // FIX: Added .orElseThrow to handle Optional
+        return supplierRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+    }
+
+    @Override
+    public void updateSupplierStatus(Long id, boolean active) {
+        SupplierProfile supplier = getSupplierById(id);
+        supplier.setActive(active);
+        supplierRepo.save(supplier);
+    }
+
+    @Override
+    public SupplierProfile createSupplier(SupplierProfile s) { return supplierRepo.save(s); }
+    @Override
+    public SupplierProfile getBySupplierCode(String code) { return supplierRepo.findBySupplierCode(code); }
+    @Override
+    public List<SupplierProfile> getAllSuppliers() { return supplierRepo.findAll(); }
 }

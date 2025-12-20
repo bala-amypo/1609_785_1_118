@@ -6,41 +6,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "purchase_orders")
-public class PurchaseOrderRecord {
-
+@Table(name = "delivery_records")
+public class DeliveryRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String poNumber;
-
-    @Column(nullable = false)
-    private Long supplierId;
-
-    @Column(nullable = false)
-    private LocalDate issueDate;
-
-    @Column(nullable = false)
-    private LocalDate promisedDeliveryDate;
-
-    @Column(length = 500) 
+    private Long poId;
+    private LocalDateTime actualDeliveryDate;
+    private String deliveryStatus;
     private String notes;
-    public PurchaseOrderRecord() {}
+
+    public DeliveryRecord() {}
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public String getPoNumber() { return poNumber; }
-    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
-    public Long getSupplierId() { return supplierId; }
-    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
-    public LocalDate getIssueDate() { return issueDate; }
-    public void setIssueDate(LocalDate issueDate) { this.issueDate = issueDate; }
-    public LocalDate getPromisedDeliveryDate() { return promisedDeliveryDate; }
-    public void setPromisedDeliveryDate(LocalDate d) { this.promisedDeliveryDate = d; }
+    public Long getPoId() { return poId; }
+    public void setPoId(Long poId) { this.poId = poId; }
+    public LocalDateTime getActualDeliveryDate() { return actualDeliveryDate; }
+    public void setActualDeliveryDate(LocalDateTime date) { this.actualDeliveryDate = date; }
+    public String getDeliveryStatus() { return deliveryStatus; }
+    public void setDeliveryStatus(String status) { this.deliveryStatus = status; }
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 }
