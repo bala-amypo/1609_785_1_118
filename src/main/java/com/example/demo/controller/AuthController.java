@@ -21,7 +21,6 @@ public class AuthController {
         return service.registerUser(user);
     }
     
-    // Note: Login logic usually involves Spring Security authentication managers
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
         return "Login logic involves JWT generation based on Security context";
