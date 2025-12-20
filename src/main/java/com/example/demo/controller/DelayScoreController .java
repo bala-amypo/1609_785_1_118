@@ -10,7 +10,7 @@ import com.example.demo.repository.DelayScoreRecordRepository;
 
 @RestController
 @RequestMapping("/api/delay-scores")
-public class DelayScoreController {
+public class DelayScoreController{
 
     private final DelayScoreRecordRepository repo;
 

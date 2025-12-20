@@ -8,7 +8,7 @@ import com.example.demo.repository.SupplierRiskAlertRepository;
 
 @RestController
 @RequestMapping("/api/risk-alerts")
-public class SupplierRiskAlertController {
+public class SupplierRiskAlertController{
 
     private SupplierRiskAlertRepository repo;
 
