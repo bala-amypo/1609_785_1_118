@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthService authService; // Changed from AppUserService to AuthService
+    private AuthService authService; 
 
     @PostMapping("/register")
     public AppUser register(@RequestBody AppUser user) {
