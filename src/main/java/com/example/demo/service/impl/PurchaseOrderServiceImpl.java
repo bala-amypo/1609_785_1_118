@@ -15,10 +15,28 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Autowired private SupplierProfileRepository supplierRepo;
 
     @Override
-    public PurchaseOrderRecord createPO(PurchaseOrderRecord po) {
-        SupplierProfile s = supplierRepo.findById(po.getSupplierId()).orElseThrow(() -> new RuntimeException("Supplier Not Found"));
-        if (!Boolean.TRUE.equals(s.getActive())) throw new RuntimeException("Supplier must be active");
+    public PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po) {
+        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
+            .orElseThrow(() -> new RuntimeException("Invalid supplierId")); // Requirement
+        
+        if (!supplier.getActive()) {
+            throw new RuntimeException("must be active"); // Requirement
+        }
         return poRepo.save(po);
     }
-    @Override public List<PurchaseOrderRecord> getPOsBySupplierId(Long id) { return poRepo.findBySupplierId(id); }
+
+    @Override
+    public List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId) {
+        return poRepo.findBySupplierId(supplierId);
+    }
+
+    @Override
+    public PurchaseOrderRecord getPOById(Long id) {
+        return poRepo.findById(id).orElseThrow(() -> new RuntimeException("PO not found"));
+    }
+
+    @Override
+    public List<PurchaseOrderRecord> getAllPurchaseOrders() {
+        return poRepo.findAll();
+    }
 }
