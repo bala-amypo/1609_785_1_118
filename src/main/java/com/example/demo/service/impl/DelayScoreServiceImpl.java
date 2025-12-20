@@ -1,11 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DelayScoreRecord;
-import com.example.demo.model.PurchaseOrderRecord;
-import com.example.demo.model.DeliveryRecord;
-import com.example.demo.repository.DelayScoreRecordRepository;
-import com.example.demo.repository.PurchaseOrderRecordRepository;
-import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +16,17 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
     @Override
     public DelayScoreRecord computeAndSaveScore(Long poId) {
-        PurchaseOrderRecord po = poRepo.findById(poId).orElseThrow(() -> new RuntimeException("PO not found"));
-        List<DeliveryRecord> deliveries = delRepo.findByPoId(poId);
-        if (deliveries.isEmpty()) throw new RuntimeException("No delivery recorded");
+        PurchaseOrderRecord po = poRepo.findById(poId)
+                .orElseThrow(() -> new RuntimeException("PO not found"));
 
-        long days = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), deliveries.get(0).getActualDeliveryDate());
-        int delayDays = (int) Math.max(0, days);
+        List<DeliveryRecord> deliveries = delRepo.findByPoId(poId);
+        if (deliveries.isEmpty()) throw new RuntimeException("No delivery record");
+
+        // FIX: Access the first object in the List
+        DeliveryRecord delivery = deliveries.get(0);
+
+        long daysBetween = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), delivery.getActualDeliveryDate());
+        int delayDays = (int) Math.max(0, daysBetween);
 
         DelayScoreRecord ds = new DelayScoreRecord();
         ds.setPoId(poId);
@@ -34,10 +35,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
         if (delayDays == 0) { ds.setDelaySeverity("ON_TIME"); ds.setScore(100.0); }
         else if (delayDays <= 3) { ds.setDelaySeverity("MINOR"); ds.setScore(80.0); }
-        else if (delayDays <= 7) { ds.setDelaySeverity("MODERATE"); ds.setScore(50.0); }
-        else { ds.setDelaySeverity("SEVERE"); ds.setScore(20.0); }
+        else { ds.setDelaySeverity("SEVERE"); ds.setScore(40.0); }
 
         return scoreRepo.save(ds);
     }
-    @Override public List<DelayScoreRecord> getScoresBySupplierId(Long id) { return scoreRepo.findBySupplierId(id); }
+
+    @Override
+    public List<DelayScoreRecord> getScoresBySupplierId(Long id) {
+        return scoreRepo.findBySupplierId(id);
+    }
 }
