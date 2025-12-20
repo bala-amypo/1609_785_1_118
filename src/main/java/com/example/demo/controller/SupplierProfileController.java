@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SupplierProfile;
-import com.example.demo.repository.SupplierProfileRepository;
+import com.example.demo.service.SupplierProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -11,34 +12,33 @@ import java.util.List;
 public class SupplierProfileController {
 
     @Autowired
-    private SupplierProfileRepository supplierRepo;
+    private SupplierProfileService supplierService;
 
     @PostMapping("/")
     public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
-        return supplierRepo.save(supplier);
+        return supplierService.createSupplier(supplier);
     }
 
     @GetMapping("/{id}")
     public SupplierProfile getSupplier(@PathVariable Long id) {
-        return supplierRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        return supplierService.getSupplierById(id);
     }
 
     @GetMapping("/")
     public List<SupplierProfile> listAll() {
-        return supplierRepo.findAll();
+        return supplierService.getAllSuppliers();
     }
 
     @PutMapping("/{id}/status")
-    public SupplierProfile updateStatus(@PathVariable Long id, @RequestBody Boolean status) {
-        SupplierProfile supplier = supplierRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-        supplier.setActive(status);
-        return supplierRepo.save(supplier);
+    public SupplierProfile updateStatus(
+            @PathVariable Long id,
+            @RequestBody Boolean status) {
+
+        return supplierService.updateSupplierStatus(id, status);
     }
 
     @GetMapping("/lookup/{supplierCode}")
     public SupplierProfile lookupByCode(@PathVariable String supplierCode) {
-        return supplierRepo.findBySupplierCode(supplierCode);
+        return supplierService.getBySupplierCode(supplierCode);
     }
 }
