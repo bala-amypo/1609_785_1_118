@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.AppUser;
 import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ public class AuthController {
     public AppUser register(@RequestBody AppUser user) {
         return authService.registerUser(user);
     }
-
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
         // Placeholder logic
