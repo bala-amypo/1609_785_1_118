@@ -20,7 +20,6 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        // Fixes the Optional conversion error
         return supplierRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
