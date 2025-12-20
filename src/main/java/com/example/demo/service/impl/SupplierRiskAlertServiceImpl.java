@@ -21,8 +21,8 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public void resolveAlert(Long id) {
         SupplierRiskAlert alert = alertRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Alert not found"));
-        alert.setResolved(true); // corrected
+            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+        alert.setResolved(true);
         alertRepo.save(alert);
     }
 
@@ -39,5 +39,11 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
         return alertRepo.findByResolved(false);
+    }
+
+    @Override
+    public SupplierRiskAlert getAlertById(Long id) {
+        return alertRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
     }
 }
