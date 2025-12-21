@@ -22,10 +22,18 @@ public class DeliveryRecord {
     public DeliveryRecord() {}
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Long getPoId() { return poId; }
-    public void setPoId(Long poId) { this.poId = poId; }
+    public Long getId() {
+     return id; 
+     }
+    public void setId(Long id) { 
+    this.id = id;
+     }
+    public Long getPoId() { 
+    return poId; 
+    }
+    public void setPoId(Long poId) { 
+    this.poId = poId;
+     }
     public LocalDateTime getActualDeliveryDate() { return actualDeliveryDate; }
     public void setActualDeliveryDate(LocalDateTime date) { this.actualDeliveryDate = date; }
     public String getDeliveryStatus() { return deliveryStatus; }
