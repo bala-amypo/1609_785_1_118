@@ -5,39 +5,72 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "delivery_records")
 public class DeliveryRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long poId;
     private LocalDateTime actualDeliveryDate;
     private String deliveryStatus;
     private String notes;
 
-    public DeliveryRecord() {}
+    // Default constructor
+    public DeliveryRecord() {
+    }
+
+    // Set value before insert
+    @PrePersist
+    protected void onCreate() {
+        if (this.actualDeliveryDate == null) {
+            this.actualDeliveryDate = LocalDateTime.now();
+        }
+    }
 
     // Getters and Setters
     public Long getId() {
-     return id; 
-     }
-    public void setId(Long id) { 
-    this.id = id;
-     }
-    public Long getPoId() { 
-    return poId; 
+        return id;
     }
-    public void setPoId(Long poId) { 
-    this.poId = poId;
-     }
-    public LocalDateTime getActualDeliveryDate() { return actualDeliveryDate; }
-    public void setActualDeliveryDate(LocalDateTime date) { this.actualDeliveryDate = date; }
-    public String getDeliveryStatus() { return deliveryStatus; }
-    public void setDeliveryStatus(String status) { this.deliveryStatus = status; }
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPoId() {
+        return poId;
+    }
+
+    public void setPoId(Long poId) {
+        this.poId = poId;
+    }
+
+    public LocalDateTime getActualDeliveryDate() {
+        return actualDeliveryDate;
+    }
+
+    public void setActualDeliveryDate(LocalDateTime actualDeliveryDate) {
+        this.actualDeliveryDate = actualDeliveryDate;
+    }
+
+    public String getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
