@@ -1,13 +1,8 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Min;
-import jakarta.persistence.PrePersist;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "delivery_records")
@@ -17,19 +12,28 @@ public class DeliveryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long poId;
-    private LocalDateTime actualDeliveryDate;
-    private String deliveryStatus;
+
+    @Column(nullable = false)
+    private LocalDate actualDeliveryDate;
+
+    @Column(nullable = false)
+    @Min(value = 0, message = "Delivered quantity cannot be negative")
+    private Integer deliveredQuantity;
+
+    @Column
     private String notes;
-    @Min(0)
-    public DeliveryRecord() {
-    }
+
+    public DeliveryRecord() {}
+
     @PrePersist
     protected void onCreate() {
         if (this.actualDeliveryDate == null) {
-            this.actualDeliveryDate = LocalDateTime.now();
+            this.actualDeliveryDate = LocalDate.now();
         }
     }
+
     public Long getId() {
         return id;
     }
@@ -46,20 +50,20 @@ public class DeliveryRecord {
         this.poId = poId;
     }
 
-    public LocalDateTime getActualDeliveryDate() {
+    public LocalDate getActualDeliveryDate() {
         return actualDeliveryDate;
     }
 
-    public void setActualDeliveryDate(LocalDateTime actualDeliveryDate) {
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
         this.actualDeliveryDate = actualDeliveryDate;
     }
 
-    public String getDeliveryStatus() {
-        return deliveryStatus;
+    public Integer getDeliveredQuantity() {
+        return deliveredQuantity;
     }
 
-    public void setDeliveryStatus(String deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
+    public void setDeliveredQuantity(Integer deliveredQuantity) {
+        this.deliveredQuantity = deliveredQuantity;
     }
 
     public String getNotes() {
