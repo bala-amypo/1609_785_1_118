@@ -14,18 +14,13 @@ public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true, nullable = false)
     private String username;
-
     @Column(nullable = false)
     private String password;
-
     @Column(unique = true, nullable = false)
     private String email;
-
-    private String role; // e.g., "ADMIN", "PROCUREMENT_OFFICER"
-
+    private String role;
     private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
