@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
-
 @Entity
 public class SupplierProfile {
     @Id
