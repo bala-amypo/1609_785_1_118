@@ -32,8 +32,6 @@ public class SupplierRiskAlert {
 
     public SupplierRiskAlert() {
     }
-
-    // ✅ Set alertDate automatically before insert
     @PrePersist
     protected void onCreate() {
         this.alertDate = LocalDateTime.now();
