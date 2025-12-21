@@ -20,6 +20,7 @@ public class DeliveryRecord {
     private LocalDateTime actualDeliveryDate;
     private String deliveryStatus;
     private String notes;
+    @Min(0)
     public DeliveryRecord() {
     }
     @PrePersist
