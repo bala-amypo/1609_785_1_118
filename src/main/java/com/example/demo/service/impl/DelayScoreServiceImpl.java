@@ -7,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
-
     @Autowired private DelayScoreRecordRepository scoreRepo;
     @Autowired private PurchaseOrderRecordRepository poRepo;
     @Autowired private DeliveryRecordRepository delRepo;
     @Autowired private SupplierProfileRepository supplierRepo;
-
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
         // Requirement: Fetch PO and deliveries. Throw "No deliveries" if empty
