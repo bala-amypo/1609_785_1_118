@@ -15,16 +15,12 @@ public class PurchaseOrderRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true, nullable = false)
     private String poNumber;
-
     @Column(nullable = false)
     private Long supplierId;
-
     @Column(nullable = false)
-    private LocalDate issueDate; // Added missing requirement
-
+    private LocalDate issueDate; 
     @Column(nullable = false)
     private LocalDate promisedDeliveryDate;
 

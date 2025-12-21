@@ -20,20 +20,14 @@ public class DeliveryRecord {
     private LocalDateTime actualDeliveryDate;
     private String deliveryStatus;
     private String notes;
-
-    // Default constructor
     public DeliveryRecord() {
     }
-
-    // Set value before insert
     @PrePersist
     protected void onCreate() {
         if (this.actualDeliveryDate == null) {
             this.actualDeliveryDate = LocalDateTime.now();
         }
     }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
