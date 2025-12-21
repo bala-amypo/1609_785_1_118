@@ -15,7 +15,6 @@ public class AuthController {
     }
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
-        // Placeholder logic
         return "Login Successful";
     }
 }
