@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final String SECRET_KEY = "secret-key-demo";
-    private final long VALIDITY = 3600000; // 1 hour
+    private final long VALIDITY = 3600000;
 
     public String generateToken(String username) {
         return Jwts.builder()
@@ -22,7 +22,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUsername(String token) {
+    public String getUsernameFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)

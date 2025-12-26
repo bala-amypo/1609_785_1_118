@@ -1,28 +1,18 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
-import com.example.demo.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private AppUserRepository userRepository;
+    private AppUserRepository userRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -31,30 +21,21 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public ApiResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername()))
-            throw new BadRequestException("Username already exists");
-        if (userRepository.existsByEmail(request.getEmail()))
-            throw new BadRequestException("Email already exists");
-
-        AppUser user = new AppUser();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-
-        AppUser savedUser = userRepository.save(user);
-        String token = jwtTokenProvider.generateToken(savedUser);
-        return new ApiResponse("User registered successfully", token);
+    public String register(AppUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        AppUser savedUser = userRepo.save(user);
+        return jwtTokenProvider.generateToken(savedUser.getUsername());
     }
 
     @Override
-    public ApiResponse login(LoginRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-        AppUser user = (AppUser) auth.getPrincipal();
-        String token = jwtTokenProvider.generateToken(user);
-        return new ApiResponse("Login successful", token);
+    public String login(String username, String password) {
+        AppUser user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return jwtTokenProvider.generateToken(user.getUsername());
     }
 }
