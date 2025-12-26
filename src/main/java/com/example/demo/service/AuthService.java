@@ -1,7 +1,10 @@
 package com.example.demo.service;
-import com.example.demo.model.AppUser;
+
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.ApiResponse;
+
 public interface AuthService {
-    AppUser registerUser(AppUser user);
-    AppUser findByUsername(String username);
-    boolean existsByEmail(String email);
+    ApiResponse register(RegisterRequest request);
+    ApiResponse login(LoginRequest request);
 }
