@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
@@ -28,11 +29,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(String username, String password) {
-        AppUser user = userRepo.findByUsername(username)
+    public String login(LoginRequest request) {
+        AppUser user = userRepo.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
