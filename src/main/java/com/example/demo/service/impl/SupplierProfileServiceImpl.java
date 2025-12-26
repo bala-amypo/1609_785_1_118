@@ -3,9 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.SupplierProfileService;
+import com.example.demo.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +22,12 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
 
     @Override
     public SupplierProfile getSupplierById(Long id) {
-        return supplierRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        return supplierRepo.findById(id).orElseThrow(() -> new BadRequestException("Supplier not found"));
     }
 
     @Override
-    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
-        return supplierRepo.findBySupplierCode(supplierCode);
+    public Optional<SupplierProfile> getBySupplierCode(String code) {
+        return supplierRepo.findBySupplierCode(code);
     }
 
     @Override
