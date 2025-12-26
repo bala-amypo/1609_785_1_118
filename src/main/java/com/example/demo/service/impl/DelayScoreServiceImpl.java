@@ -24,7 +24,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final SupplierProfileRepository supplierProfileRepository;
     private final DeliveryRecordRepository deliveryRepository;
 
-    // ✅ Constructor injection
+    // ✅ Constructor injection (correct order)
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayScoreRecordRepository,
             PurchaseOrderRecordRepository poRepository,
@@ -39,14 +39,13 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        Optional<PurchaseOrderRecord> poOpt = poRepository.findById(poId);
-        if (poOpt.isEmpty()) {
-            throw new BadRequestException("PO not found");
-        }
+        PurchaseOrderRecord po = poRepository.findById(poId)
+                .orElseThrow(() -> new BadRequestException("PO not found"));
 
-        PurchaseOrderRecord po = poOpt.get();
-        Optional<SupplierProfile> supplierOpt = supplierProfileRepository.findById(po.getSupplierId());
-        if (supplierOpt.isEmpty() || !supplierOpt.get().getActive()) {
+        SupplierProfile supplier = supplierProfileRepository.findById(po.getSupplierId())
+                .orElseThrow(() -> new BadRequestException("Supplier not found"));
+
+        if (!supplier.getActive()) {
             throw new BadRequestException("Inactive supplier");
         }
 

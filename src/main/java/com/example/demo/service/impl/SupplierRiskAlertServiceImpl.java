@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,12 @@ import java.util.List;
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    @Autowired
-    private SupplierRiskAlertRepository riskAlertRepository;
+    private final SupplierRiskAlertRepository riskAlertRepository;
+
+    // ✅ Constructor injection (better for testing)
+    public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
+        this.riskAlertRepository = riskAlertRepository;
+    }
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
@@ -35,7 +38,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         return riskAlertRepository.save(alert);
     }
 
-    // ✅ Added method required by your test
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
         return riskAlertRepository.findAll();
