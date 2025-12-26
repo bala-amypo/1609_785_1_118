@@ -48,6 +48,10 @@ public class PurchaseOrderRecord {
         this.promisedDeliveryDate = promisedDeliveryDate;
     }
 
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public void setIssuedDate(LocalDate issuedDate) { this.issuedDate = issuedDate; }
+    public LocalDate getIssuedDate() { 
+    return issuedDate; 
+    }
+    public void setIssuedDate(LocalDate issuedDate) { 
+    this.issuedDate = issuedDate; 
+    }
 }
