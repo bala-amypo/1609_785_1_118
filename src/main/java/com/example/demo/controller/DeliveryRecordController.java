@@ -5,7 +5,6 @@ import com.example.demo.service.DeliveryRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -13,23 +12,20 @@ import java.util.List;
 public class DeliveryRecordController {
 
     @Autowired
-    private DeliveryRecordService deliveryRecordService;
+    private DeliveryRecordService deliveryService;
 
     @PostMapping
     public ResponseEntity<DeliveryRecord> recordDelivery(@RequestBody DeliveryRecord delivery) {
-        DeliveryRecord recorded = deliveryRecordService.recordDelivery(delivery);
-        return ResponseEntity.ok(recorded);
+        return ResponseEntity.ok(deliveryService.recordDelivery(delivery));
     }
 
     @GetMapping
     public ResponseEntity<List<DeliveryRecord>> getAllDeliveries() {
-        List<DeliveryRecord> deliveries = deliveryRecordService.getAllDeliveries();
-        return ResponseEntity.ok(deliveries);
+        return ResponseEntity.ok(deliveryService.getAllDeliveries());
     }
 
     @GetMapping("/po/{poId}")
     public ResponseEntity<List<DeliveryRecord>> getDeliveriesByPO(@PathVariable Long poId) {
-        List<DeliveryRecord> deliveries = deliveryRecordService.getDeliveriesByPO(poId);
-        return ResponseEntity.ok(deliveries);
+        return ResponseEntity.ok(deliveryService.getDeliveriesByPO(poId));
     }
 }

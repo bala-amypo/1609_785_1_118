@@ -5,7 +5,6 @@ import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -13,23 +12,20 @@ import java.util.List;
 public class SupplierRiskAlertController {
 
     @Autowired
-    private SupplierRiskAlertService riskAlertService;
+    private SupplierRiskAlertService alertService;
 
     @PostMapping
     public ResponseEntity<SupplierRiskAlert> createAlert(@RequestBody SupplierRiskAlert alert) {
-        SupplierRiskAlert created = riskAlertService.createAlert(alert);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(alertService.createAlert(alert));
     }
 
     @GetMapping("/supplier/{supplierId}")
     public ResponseEntity<List<SupplierRiskAlert>> getAlertsBySupplier(@PathVariable Long supplierId) {
-        List<SupplierRiskAlert> alerts = riskAlertService.getAlertsBySupplier(supplierId);
-        return ResponseEntity.ok(alerts);
+        return ResponseEntity.ok(alertService.getAlertsBySupplier(supplierId));
     }
 
     @PutMapping("/{alertId}/resolve")
     public ResponseEntity<SupplierRiskAlert> resolveAlert(@PathVariable Long alertId) {
-        SupplierRiskAlert resolved = riskAlertService.resolveAlert(alertId);
-        return ResponseEntity.ok(resolved);
+        return ResponseEntity.ok(alertService.resolveAlert(alertId));
     }
 }

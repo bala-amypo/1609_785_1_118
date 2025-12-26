@@ -5,7 +5,6 @@ import com.example.demo.service.DelayScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,19 +16,16 @@ public class DelayScoreController {
 
     @PostMapping("/compute/{poId}")
     public ResponseEntity<DelayScoreRecord> computeScore(@PathVariable Long poId) {
-        DelayScoreRecord score = delayScoreService.computeDelayScore(poId);
-        return ResponseEntity.ok(score);
+        return ResponseEntity.ok(delayScoreService.computeDelayScore(poId));
     }
 
     @GetMapping
     public ResponseEntity<List<DelayScoreRecord>> getAllScores() {
-        List<DelayScoreRecord> scores = delayScoreService.getAllScores();
-        return ResponseEntity.ok(scores);
+        return ResponseEntity.ok(delayScoreService.getAllScores());
     }
 
     @GetMapping("/supplier/{supplierId}")
     public ResponseEntity<List<DelayScoreRecord>> getScoresBySupplier(@PathVariable Long supplierId) {
-        List<DelayScoreRecord> scores = delayScoreService.getScoresBySupplier(supplierId);
-        return ResponseEntity.ok(scores);
+        return ResponseEntity.ok(delayScoreService.getScoresBySupplier(supplierId));
     }
 }
