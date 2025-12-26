@@ -87,3 +87,4 @@ public class DelayScoreServiceImpl implements DelayScoreService {
         return delayScoreRecordRepository.findAll();
     }
 }
+mkdir -p src/main/java/com/example/demo/model
