@@ -10,3 +10,11 @@ public class LoginRequest {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 }
+public class LoginRequest {
+    private String username;
+    private String password;
+
+    public LoginRequest() {} // add no-arg constructor
+
+    // getters and setters as you have
+}

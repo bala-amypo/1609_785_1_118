@@ -34,3 +34,13 @@ public class RegisterRequest {
         this.role = role;
          }
 }
+public class RegisterRequest {
+    private String username;
+    private String password;
+    private String email;
+    private Role role;
+
+    public RegisterRequest() {}  // add no-arg constructor
+
+    // getters and setters as you have
+}
