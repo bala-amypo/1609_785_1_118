@@ -3,42 +3,46 @@ package com.example.demo.controller;
 import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/suppliers")
 public class SupplierProfileController {
 
     @Autowired
-    private SupplierProfileService supplierService;
-
-    @PostMapping("/")
-    public SupplierProfile createSupplier(@RequestBody SupplierProfile supplier) {
-        return supplierService.createSupplier(supplier);
-    }
+    private SupplierProfileService supplierProfileService;
 
     @GetMapping("/{id}")
-    public SupplierProfile getSupplier(@PathVariable Long id) {
-        return supplierService.getSupplierById(id);
+    public ResponseEntity<SupplierProfile> getSupplier(@PathVariable Long id) {
+        SupplierProfile supplier = supplierProfileService.getSupplierById(id);
+        return ResponseEntity.ok(supplier);
     }
 
-    @GetMapping("/")
-    public List<SupplierProfile> listAll() {
-        return supplierService.getAllSuppliers();
+    @GetMapping
+    public ResponseEntity<List<SupplierProfile>> getAllSuppliers() {
+        List<SupplierProfile> suppliers = supplierProfileService.getAllSuppliers();
+        return ResponseEntity.ok(suppliers);
+    }
+
+    @PostMapping
+    public ResponseEntity<SupplierProfile> createSupplier(@RequestBody SupplierProfile supplier) {
+        SupplierProfile created = supplierProfileService.createSupplier(supplier);
+        return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}/status")
-    public SupplierProfile updateStatus(
-            @PathVariable Long id,
-            @RequestBody Boolean status) {
-
-        return supplierService.updateSupplierStatus(id, status);
+    public ResponseEntity<SupplierProfile> updateStatus(@PathVariable Long id, @RequestParam Boolean active) {
+        SupplierProfile updated = supplierProfileService.updateSupplierStatus(id, active);
+        return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("/lookup/{supplierCode}")
-    public SupplierProfile lookupByCode(@PathVariable String supplierCode) {
-        return supplierService.getBySupplierCode(supplierCode);
+    @GetMapping("/code/{code}")
+    public ResponseEntity<SupplierProfile> getByCode(@PathVariable String code) {
+        Optional<SupplierProfile> supplier = supplierProfileService.getBySupplierCode(code);
+        return supplier.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
