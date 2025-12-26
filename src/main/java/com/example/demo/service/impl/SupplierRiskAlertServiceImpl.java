@@ -5,6 +5,7 @@ import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -18,12 +19,14 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         return alertRepo.save(alert);
     }
 
+    // ✅ RETURN TYPE FIXED
     @Override
-    public void resolveAlert(Long id) {
+    public SupplierRiskAlert resolveAlert(Long id) {
         SupplierRiskAlert alert = alertRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+
         alert.setResolved(true);
-        alertRepo.save(alert);
+        return alertRepo.save(alert);
     }
 
     @Override
@@ -31,19 +34,17 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         return alertRepo.findBySupplierId(supplierId);
     }
 
-    @Override
+    // (Optional but correct)
     public List<SupplierRiskAlert> getAllAlerts() {
         return alertRepo.findAll();
     }
 
-    @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
         return alertRepo.findByResolved(false);
     }
 
-    @Override
     public SupplierRiskAlert getAlertById(Long id) {
         return alertRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
     }
 }
