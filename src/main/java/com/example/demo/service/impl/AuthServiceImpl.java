@@ -3,7 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ApiResponse;
-import com.example.demo.model.AppUser;
+import com.example.demo.AppUser;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;

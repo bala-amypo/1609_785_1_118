@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.AppUser;
+import com.example.demo.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

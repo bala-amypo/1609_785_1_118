@@ -1,7 +1,7 @@
 
 package com.example.demo.security;
 
-import com.example.demo.model.AppUser;
+import com.example.demo.AppUser;
 import org.springframework.stereotype.Component;
 
 @Component
