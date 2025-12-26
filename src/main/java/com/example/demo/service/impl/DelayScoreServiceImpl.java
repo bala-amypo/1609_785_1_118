@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.*; // This imports your moved models
+import com.example.demo.model.*; // ✅ FIXED: Must point to the .model package
 import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,8 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final PurchaseOrderRecordRepository poRepository;
     private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierProfileRepository;
-    // The test found a 5th argument: SupplierRiskAlertService (or Impl)
     private final SupplierRiskAlertServiceImpl riskAlertService; 
 
-    /**
-     * CONSTRUCTOR FIX:
-     * The Test (line 69) is passing 5 arguments. 
-     * We must accept all 5 in this exact order to pass compilation.
-     */
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayScoreRecordRepository,
             PurchaseOrderRecordRepository poRepository,
