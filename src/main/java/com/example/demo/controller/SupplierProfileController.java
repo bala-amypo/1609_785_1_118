@@ -18,31 +18,45 @@ public class SupplierProfileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SupplierProfile> getSupplier(@PathVariable Long id) {
-        SupplierProfile supplier = supplierProfileService.getSupplierById(id);
-        return ResponseEntity.ok(supplier);
+        return ResponseEntity.ok(
+                supplierProfileService.getSupplierById(id)
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<SupplierProfile>> getAllSuppliers() {
-        List<SupplierProfile> suppliers = supplierProfileService.getAllSuppliers();
-        return ResponseEntity.ok(suppliers);
+        return ResponseEntity.ok(
+                supplierProfileService.getAllSuppliers()
+        );
     }
 
     @PostMapping
-    public ResponseEntity<SupplierProfile> createSupplier(@RequestBody SupplierProfile supplier) {
-        SupplierProfile created = supplierProfileService.createSupplier(supplier);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<SupplierProfile> createSupplier(
+            @RequestBody SupplierProfile supplier) {
+
+        return ResponseEntity.ok(
+                supplierProfileService.createSupplier(supplier)
+        );
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<SupplierProfile> updateStatus(@PathVariable Long id, @RequestParam Boolean active) {
-        SupplierProfile updated = supplierProfileService.updateSupplierStatus(id, active);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<SupplierProfile> updateStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+
+        return ResponseEntity.ok(
+                supplierProfileService.updateSupplierStatus(id, active)
+        );
     }
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<SupplierProfile> getByCode(@PathVariable String code) {
-        Optional<SupplierProfile> supplier = supplierProfileService.getBySupplierCode(code);
-        return supplier.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<SupplierProfile> getByCode(
+            @PathVariable String code) {
+
+        Optional<SupplierProfile> supplier =
+                supplierProfileService.getBySupplierCode(code);
+
+        return supplier.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
