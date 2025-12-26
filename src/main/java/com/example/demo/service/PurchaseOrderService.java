@@ -8,4 +8,5 @@ public interface PurchaseOrderService {
     PurchaseOrderRecord createPurchaseOrder(PurchaseOrderRecord po);
     List<PurchaseOrderRecord> getPOsBySupplier(Long supplierId);
     Optional<PurchaseOrderRecord> getPOById(Long id);
+    List<PurchaseOrderRecord> getAllPurchaseOrders();
 }
