@@ -1,16 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.DelayScoreRecord;
-import com.example.demo.DeliveryRecord;
-import com.example.demo.PurchaseOrderRecord;
-import com.example.demo.SupplierProfile;
-import com.example.demo.repository.DelayScoreRecordRepository;
-import com.example.demo.repository.DeliveryRecordRepository;
-import com.example.demo.repository.PurchaseOrderRecordRepository;
-import com.example.demo.repository.SupplierProfileRepository;
+import com.example.demo.*; // This imports your moved models
+import com.example.demo.repository.*;
 import com.example.demo.service.DelayScoreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -21,27 +14,28 @@ public class DelayScoreServiceImpl implements DelayScoreService {
 
     private final DelayScoreRecordRepository delayScoreRecordRepository;
     private final PurchaseOrderRecordRepository poRepository;
+    private final DeliveryRecordRepository deliveryRepository;
     private final SupplierProfileRepository supplierProfileRepository;
+    // The test found a 5th argument: SupplierRiskAlertService (or Impl)
+    private final SupplierRiskAlertServiceImpl riskAlertService; 
 
     /**
-     * Use @Autowired on the field for the new dependency.
-     * This prevents breaking the existing 3-argument constructor used by tests.
-     */
-    @Autowired
-    private DeliveryRecordRepository deliveryRepository;
-
-    /**
-     * Modified Constructor (3 arguments only).
-     * This matches exactly what your test file (line 69) is calling.
+     * CONSTRUCTOR FIX:
+     * The Test (line 69) is passing 5 arguments. 
+     * We must accept all 5 in this exact order to pass compilation.
      */
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayScoreRecordRepository,
             PurchaseOrderRecordRepository poRepository,
-            SupplierProfileRepository supplierProfileRepository
+            DeliveryRecordRepository deliveryRepository,
+            SupplierProfileRepository supplierProfileRepository,
+            SupplierRiskAlertServiceImpl riskAlertService
     ) {
         this.delayScoreRecordRepository = delayScoreRecordRepository;
         this.poRepository = poRepository;
+        this.deliveryRepository = deliveryRepository;
         this.supplierProfileRepository = supplierProfileRepository;
+        this.riskAlertService = riskAlertService;
     }
 
     @Override
@@ -56,7 +50,6 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new BadRequestException("Inactive supplier");
         }
 
-        // This will now work because Spring injects deliveryRepository via field injection
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
             throw new BadRequestException("No deliveries found for PO");
