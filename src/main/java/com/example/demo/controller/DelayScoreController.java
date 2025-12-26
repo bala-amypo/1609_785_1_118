@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DelayScoreRecord;
+import com.example.demo.model.DelayScoreRecord;
 import com.example.demo.service.DelayScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
