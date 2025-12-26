@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.model.DelayScoreRecord;
-import java.util.List;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.ApiResponse;
 
-public interface DelayScoreService {
-    DelayScoreRecord computeDelayScore(Long poId);
-    List<DelayScoreRecord> getScoresBySupplier(Long supplierId);
-    List<DelayScoreRecord> getAllScores();
+public interface AuthService {
+    ApiResponse register(RegisterRequest request);
+    ApiResponse login(LoginRequest request);
 }
