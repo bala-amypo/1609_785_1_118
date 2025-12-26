@@ -1,14 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DeliveryRecord;
-import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.service.DeliveryRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,25 +13,23 @@ import java.util.List;
 public class DeliveryRecordController {
 
     @Autowired
-    private DeliveryRecordRepository deliveryRepo;
+    private DeliveryRecordService deliveryRecordService;
 
-    @PostMapping("/ rd")
-    public DeliveryRecord recordDelivery(@RequestBody DeliveryRecord delivery) {
-        return deliveryRepo.save(delivery);
+    @PostMapping
+    public ResponseEntity<DeliveryRecord> recordDelivery(@RequestBody DeliveryRecord delivery) {
+        DeliveryRecord recorded = deliveryRecordService.recordDelivery(delivery);
+        return ResponseEntity.ok(recorded);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DeliveryRecord>> getAllDeliveries() {
+        List<DeliveryRecord> deliveries = deliveryRecordService.getAllDeliveries();
+        return ResponseEntity.ok(deliveries);
     }
 
     @GetMapping("/po/{poId}")
-    public List<DeliveryRecord> getDeliveriesForPO(@PathVariable Long poId) {
-        return deliveryRepo.findByPoId(poId);
-    }
-
-    @GetMapping("/{id}")
-    public DeliveryRecord getDelivery(@PathVariable Long id) {
-        return deliveryRepo.findById(id).orElseThrow();
-    }
-
-    @GetMapping("/")
-    public List<DeliveryRecord> listAll() {
-        return deliveryRepo.findAll();
+    public ResponseEntity<List<DeliveryRecord>> getDeliveriesByPO(@PathVariable Long poId) {
+        List<DeliveryRecord> deliveries = deliveryRecordService.getDeliveriesByPO(poId);
+        return ResponseEntity.ok(deliveries);
     }
 }
