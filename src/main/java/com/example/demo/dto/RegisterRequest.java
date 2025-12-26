@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Role;
+import com.example.demo.Role;
 
 public class RegisterRequest {
     private String username;
