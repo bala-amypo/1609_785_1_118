@@ -1,9 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
-import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,30 +14,38 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    private AppUserRepository userRepo;
+    private AppUserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     @Override
-    public String register(AppUser user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        AppUser savedUser = userRepo.save(user);
-        return jwtTokenProvider.generateToken(savedUser.getUsername());
+    public ApiResponse register(RegisterRequest request) {
+
+        AppUser user = new AppUser();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        userRepository.save(user);
+
+        return new ApiResponse(true, "User registered successfully");
     }
 
     @Override
-    public String login(LoginRequest request) {
-        AppUser user = userRepo.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ApiResponse login(LoginRequest request) {
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+        AppUser user = userRepository.findByUsername(request.getUsername())
+                .orElse(null);
+
+        if (user == null) {
+            return new ApiResponse(false, "User not found");
         }
 
-        return jwtTokenProvider.generateToken(user.getUsername());
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return new ApiResponse(false, "Invalid credentials");
+        }
+
+        return new ApiResponse(true, "Login successful");
     }
 }
