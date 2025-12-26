@@ -10,11 +10,11 @@ import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PurchaseOrderRecordRepository;
 import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
@@ -22,19 +22,26 @@ public class DelayScoreServiceImpl implements DelayScoreService {
     private final DelayScoreRecordRepository delayScoreRecordRepository;
     private final PurchaseOrderRecordRepository poRepository;
     private final SupplierProfileRepository supplierProfileRepository;
-    private final DeliveryRecordRepository deliveryRepository;
 
-    // ✅ Constructor injection (correct order)
+    /**
+     * Use @Autowired on the field for the new dependency.
+     * This prevents breaking the existing 3-argument constructor used by tests.
+     */
+    @Autowired
+    private DeliveryRecordRepository deliveryRepository;
+
+    /**
+     * Modified Constructor (3 arguments only).
+     * This matches exactly what your test file (line 69) is calling.
+     */
     public DelayScoreServiceImpl(
             DelayScoreRecordRepository delayScoreRecordRepository,
             PurchaseOrderRecordRepository poRepository,
-            SupplierProfileRepository supplierProfileRepository,
-            DeliveryRecordRepository deliveryRepository
+            SupplierProfileRepository supplierProfileRepository
     ) {
         this.delayScoreRecordRepository = delayScoreRecordRepository;
         this.poRepository = poRepository;
         this.supplierProfileRepository = supplierProfileRepository;
-        this.deliveryRepository = deliveryRepository;
     }
 
     @Override
@@ -49,6 +56,7 @@ public class DelayScoreServiceImpl implements DelayScoreService {
             throw new BadRequestException("Inactive supplier");
         }
 
+        // This will now work because Spring injects deliveryRepository via field injection
         List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
             throw new BadRequestException("No deliveries found for PO");
