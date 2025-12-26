@@ -48,5 +48,3 @@ public class SecurityConfig {
         return http.build();
     }
 
-mv dto demo/dto
-
