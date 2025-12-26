@@ -1,74 +1,84 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.DelayScoreRecord;
+import com.example.demo.model.DeliveryRecord;
+import com.example.demo.model.PurchaseOrderRecord;
+import com.example.demo.model.SupplierProfile;
+import com.example.demo.repository.DelayScoreRecordRepository;
+import com.example.demo.repository.DeliveryRecordRepository;
+import com.example.demo.repository.PurchaseOrderRecordRepository;
+import com.example.demo.repository.SupplierProfileRepository;
 import com.example.demo.service.DelayScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class DelayScoreServiceImpl implements DelayScoreService {
-    @Autowired private DelayScoreRecordRepository scoreRepo;
-    @Autowired private PurchaseOrderRecordRepository poRepo;
-    @Autowired private DeliveryRecordRepository delRepo;
-    @Autowired private SupplierProfileRepository supplierRepo;
+    
+    @Autowired
+    private DelayScoreRecordRepository delayScoreRecordRepository;
+    
+    @Autowired
+    private PurchaseOrderRecordRepository poRepository;
+    
+    @Autowired
+    private SupplierProfileRepository supplierProfileRepository;
+    
+    @Autowired
+    private DeliveryRecordRepository deliveryRepository;
+
     @Override
     public DelayScoreRecord computeDelayScore(Long poId) {
-        // Requirement: Fetch PO and deliveries. Throw "No deliveries" if empty
-        PurchaseOrderRecord po = poRepo.findById(poId)
-                .orElseThrow(() -> new RuntimeException("PO not found"));
+        Optional<PurchaseOrderRecord> poOpt = poRepository.findById(poId);
+        if (poOpt.isEmpty()) {
+            throw new BadRequestException("PO not found");
+        }
         
-        List<DeliveryRecord> deliveries = delRepo.findByPoId(poId);
+        PurchaseOrderRecord po = poOpt.get();
+        Optional<SupplierProfile> supplierOpt = supplierProfileRepository.findById(po.getSupplierId());
+        if (supplierOpt.isEmpty() || !supplierOpt.get().getActive()) {
+            throw new BadRequestException("Inactive supplier");
+        }
+        
+        List<DeliveryRecord> deliveries = deliveryRepository.findByPoId(poId);
         if (deliveries.isEmpty()) {
-            throw new RuntimeException("No deliveries");
+            throw new BadRequestException("No deliveries found for PO");
         }
-
-        // Requirement: Check supplier active status. Throw "Inactive supplier" if false
-        SupplierProfile supplier = supplierRepo.findById(po.getSupplierId())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
         
-        if (!supplier.getActive()) {
-            throw new RuntimeException("Inactive supplier");
-        }
-
-        // Requirement: Calculate delay between Promised and Actual delivery dates
         DeliveryRecord delivery = deliveries.get(0);
-        long days = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), delivery.getActualDeliveryDate());
-        int delayDays = (int) Math.max(0, days);
-
-        // Requirement: Map delay to Score and Severity
+        long delayDays = ChronoUnit.DAYS.between(po.getPromisedDeliveryDate(), delivery.getActualDeliveryDate());
+        
         DelayScoreRecord record = new DelayScoreRecord();
         record.setPoId(poId);
         record.setSupplierId(po.getSupplierId());
-        record.setDelayDays(delayDays);
-
-        if (delayDays == 0) {
+        record.setDelayDays((int) delayDays);
+        
+        if (delayDays <= 0) {
+            record.setDelaySeverity("ON_TIME");
             record.setScore(100.0);
-            record.setDelaySeverity("NONE");
-        } else if (delayDays <= 7) {
-            record.setScore(80.0);
+        } else if (delayDays <= 3) {
             record.setDelaySeverity("MINOR");
+            record.setScore(90.0);
         } else {
-            record.setScore(40.0);
-            record.setDelaySeverity("SEVERE");
+            record.setDelaySeverity("MAJOR");
+            record.setScore(70.0);
         }
-
-        return scoreRepo.save(record);
+        
+        return delayScoreRecordRepository.save(record);
     }
 
     @Override
-    public List<DelayScoreRecord> getScoresBySupplierId(Long supplierId) {
-        return scoreRepo.findBySupplierId(supplierId);
-    }
-
-    @Override
-    public DelayScoreRecord getScoreById(Long id) {
-        return scoreRepo.findById(id).orElseThrow();
+    public List<DelayScoreRecord> getScoresBySupplier(Long supplierId) {
+        return delayScoreRecordRepository.findBySupplierId(supplierId);
     }
 
     @Override
     public List<DelayScoreRecord> getAllScores() {
-        return scoreRepo.findAll();
+        return delayScoreRecordRepository.findAll();
     }
 }
