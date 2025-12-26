@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.SupplierRiskAlert;
+import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

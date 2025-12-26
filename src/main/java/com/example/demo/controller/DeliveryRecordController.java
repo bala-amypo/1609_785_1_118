@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DeliveryRecord;
+import com.example.demo.model.DeliveryRecord;
 import com.example.demo.service.DeliveryRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

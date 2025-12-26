@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.SupplierProfile;
+import com.example.demo.model.SupplierProfile;
 import com.example.demo.service.SupplierProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
