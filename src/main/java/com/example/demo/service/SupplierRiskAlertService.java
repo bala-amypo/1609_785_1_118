@@ -7,5 +7,7 @@ public interface SupplierRiskAlertService {
 
     SupplierRiskAlert createAlert(SupplierRiskAlert alert);
 
-    List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId);
+    List<SupplierRiskAlert> getAllAlerts();
+
+    SupplierRiskAlert resolveAlert(Long id);
 }

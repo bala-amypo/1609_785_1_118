@@ -1,7 +1,8 @@
 package com.example.demo.security;
 
-import com.example.demo.model.AppUser;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -9,25 +10,21 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String JWT_SECRET = "MySuperSecretKeyForJWT";
-    private final long JWT_EXPIRATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+    private final String SECRET_KEY = "secret-key-demo";
+    private final long VALIDITY = 3600000; // 1 hour
 
-    public String generateToken(AppUser user) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
-
+    public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .claim("role", user.getRole().name())
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + VALIDITY))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getUsername(String token) {
         return Jwts.parser()
-                .setSigningKey(JWT_SECRET)
+                .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -35,7 +32,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
