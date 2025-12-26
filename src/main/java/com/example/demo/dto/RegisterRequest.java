@@ -20,4 +20,4 @@ public class RegisterRequest {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 }
-mkdir -p src/main/java/com/example/demo/{dto,exception,model,repository,security,service/impl}
+mvn clean compile spring-boot:run -DskipTests
