@@ -1,13 +1,3 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.model.SupplierProfile;
-import com.example.demo.repository.SupplierProfileRepository;
-import com.example.demo.service.SupplierProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
 public class SupplierProfileServiceImpl implements SupplierProfileService {
 
@@ -26,9 +16,8 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public SupplierProfile getBySupplierCode(String supplierCode) {
-        return supplierRepo.findBySupplierCode(supplierCode)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+    public Optional<SupplierProfile> getBySupplierCode(String supplierCode) {
+        return supplierRepo.findBySupplierCode(supplierCode);
     }
 
     @Override
@@ -37,7 +26,7 @@ public class SupplierProfileServiceImpl implements SupplierProfileService {
     }
 
     @Override
-    public SupplierProfile updateSupplierStatus(Long id, boolean active) {
+    public SupplierProfile updateSupplierStatus(Long id, Boolean active) {
         SupplierProfile supplier = getSupplierById(id);
         supplier.setActive(active);
         return supplierRepo.save(supplier);
