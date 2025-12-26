@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
-    
+
     @Autowired
     private SupplierRiskAlertRepository riskAlertRepository;
 
@@ -29,8 +29,15 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        SupplierRiskAlert alert = riskAlertRepository.findById(alertId).orElseThrow();
+        SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
+                .orElseThrow(() -> new RuntimeException("Alert not found"));
         alert.setResolved(true);
         return riskAlertRepository.save(alert);
+    }
+
+    // ✅ Added method required by your test
+    @Override
+    public List<SupplierRiskAlert> getAllAlerts() {
+        return riskAlertRepository.findAll();
     }
 }
