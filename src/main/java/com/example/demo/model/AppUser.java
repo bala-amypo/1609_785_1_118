@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
