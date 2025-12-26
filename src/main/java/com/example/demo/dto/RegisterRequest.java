@@ -20,4 +20,3 @@ public class RegisterRequest {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 }
-mvn clean compile spring-boot:run -DskipTests
