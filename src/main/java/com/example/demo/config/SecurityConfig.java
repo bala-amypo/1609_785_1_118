@@ -16,7 +16,7 @@ import com.example.demo.security.JwtFilter;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Autowired
-    private JwtFilter jwtFilter;
+    private JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
