@@ -11,7 +11,13 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+    
+        SecurityScheme bearerAuth = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT");
         return new OpenAPI()
+
                 .servers(List.of(
                         new Server().url("https://9133.pro604cr.amypo.ai/")
                 ));
