@@ -11,16 +11,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
-
     private final SupplierRiskAlertRepository riskAlertRepository;
-
     public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
         this.riskAlertRepository = riskAlertRepository;
     }
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        // Fixes testAlertCreationDefaultResolvedFalse: Ensures object is not null before saving
         if (alert.getResolved() == null) {
             alert.setResolved(false);
         }
@@ -29,13 +26,11 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
-        // Fixes testSupplierMultipleAlerts: Requires custom repository method
         return riskAlertRepository.findBySupplierId(supplierId);
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        // Fixes testResolveAlertChangesFlag: Tests specifically look for BadRequestException
         SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
         alert.setResolved(true);
@@ -44,8 +39,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public List<SupplierRiskAlert> getAlertsByLevel(String level) {
-        // Fixes testCriteriaAlertMediumRisk and testCriteriaLikeHighRiskSuppliers
-        // Uses upper case conversion to ensure "medium" matches "MEDIUM"
         if (level == null) return List.of();
         String search = level.toUpperCase();
         
