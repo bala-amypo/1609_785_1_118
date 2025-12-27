@@ -18,31 +18,20 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         this.riskAlertRepository = riskAlertRepository;
     }
 
-    /**
-     * Create a new alert
-     * Default resolved = false
-     */
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
+        // Test expects default resolved = false
         if (alert.getResolved() == null) {
             alert.setResolved(false);
         }
         return riskAlertRepository.save(alert);
     }
 
-    /**
-     * Get all alerts for a specific supplier
-     * Supports multiple alerts per supplier
-     */
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
         return riskAlertRepository.findBySupplierId(supplierId);
     }
 
-    /**
-     * Resolve an alert by ID
-     * Sets resolved = true
-     */
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
         SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
@@ -51,9 +40,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         return riskAlertRepository.save(alert);
     }
 
-    /**
-     * Get all alerts in the system
-     */
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
         return riskAlertRepository.findAll();
@@ -61,12 +47,12 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     /**
      * LIKE-based alert level filtering
-     * Fixes:
-     * - testCriteriaLikeHighRiskSuppliers
-     * - testCriteriaAlertMediumRisk
+     * Matches HIGH, MEDIUM, LOW, etc.
      */
+    @Override
     public List<SupplierRiskAlert> getAlertsByLevel(String level) {
-        return riskAlertRepository.findAll().stream()
+        return riskAlertRepository.findAll()
+                .stream()
                 .filter(a ->
                         a.getAlertLevel() != null &&
                         a.getAlertLevel().toUpperCase().contains(level.toUpperCase())
@@ -75,11 +61,12 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     }
 
     /**
-     * Get unresolved alerts only
-     * Fixes testCriteriaLikeUnresolvedAlerts
+     * Return only unresolved alerts
      */
+    @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
-        return riskAlertRepository.findAll().stream()
+        return riskAlertRepository.findAll()
+                .stream()
                 .filter(a -> Boolean.FALSE.equals(a.getResolved()))
                 .collect(Collectors.toList());
     }
