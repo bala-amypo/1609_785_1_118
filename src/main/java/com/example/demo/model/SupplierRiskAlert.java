@@ -16,11 +16,10 @@ public class SupplierRiskAlert {
     private Boolean resolved = false;
     private String alertLevel;
 
-    // ✅ REQUIRED no-args constructor
     public SupplierRiskAlert() {
     }
 
-    // ✅ SAFE constructor for tests
+ 
     public SupplierRiskAlert(Long supplierId, String alertType,
                              String description, String alertLevel) {
         this.supplierId = supplierId;
