@@ -1,5 +1,4 @@
 package com.example.demo.service.impl;
-
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ApiResponse;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 @Service
 public class AuthServiceImpl implements AuthService {
 

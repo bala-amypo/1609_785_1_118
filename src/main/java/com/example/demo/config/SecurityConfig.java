@@ -31,12 +31,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
-                    "/api/auth/**",        // Login / registration
-                    "/h2-console/**",      // H2 DB console
-                    "/swagger-ui/**",      // Swagger UI resources
-                    "/swagger-ui.html",    // Swagger legacy
-                    "/v3/api-docs/**",     // OpenAPI docs JSON
-                    "/v3/api-docs.yaml"    // OpenAPI docs YAML
+                    "/api/auth/**",        
+                    "/h2-console/**",      
+                    "/swagger-ui/**",      
+                    "/swagger-ui.html",    
+                    "/v3/api-docs/**",     
+                    "/v3/api-docs.yaml"    
                 ).permitAll()
                 // All other requests require authentication
                 .anyRequest().authenticated()
