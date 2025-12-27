@@ -22,7 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getTokenFromRequest(request);
         
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            // Token is valid, proceed with request
+            
         }
         
         filterChain.doFilter(request, response);
