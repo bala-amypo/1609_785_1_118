@@ -35,6 +35,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.List;
 
 @Configuration
@@ -43,8 +44,12 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
+        
         return new OpenAPI()
+                // 1. Adds the global Authorize button and applies it to all endpoints
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                
+                // 2. Defines the JWT Bearer token security scheme
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
@@ -52,9 +57,10 @@ public class SwaggerConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
+                
+                // 3. ONLY ONE SERVER: Using the /api prefix required by your proxy
                 .servers(List.of(
-                        new Server().url("https://9133.pro604cr.amypo.ai/api").description("Proxy Server"),
-                        new Server().url("https://9133.pro604cr.amypo.ai/").description("Direct Server")
+                        new Server().url("https://9133.pro604cr.amypo.ai/api")
                 ));
     }
 }
