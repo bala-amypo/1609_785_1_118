@@ -50,10 +50,11 @@
 
 package com.example.demo.config;
 
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy; // Added this import
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -80,9 +81,10 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UserRepository userRepository; // Inject Repository directly
+    private final AppUserRepository userRepository;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, UserRepository userRepository) {
+    // ✅ FIX: Added @Lazy here to break the circular dependency cycle
+    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthFilter, AppUserRepository userRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userRepository = userRepository;
     }
@@ -93,7 +95,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                // ✅ FIX 1: AntPathRequestMatcher fixes the "No more pattern data allowed" 500 error
+                // Keep these AntPathRequestMatchers to fix your previous 500 error
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/auth/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
@@ -102,13 +104,12 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .authenticationProvider(authenticationProvider()) // Use the bean defined below
+            .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ FIX 2: Define the missing AuthenticationProvider bean here since you can't create a new file
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
