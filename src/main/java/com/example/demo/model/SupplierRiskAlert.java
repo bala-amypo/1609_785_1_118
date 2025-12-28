@@ -19,7 +19,6 @@ public class SupplierRiskAlert {
     public SupplierRiskAlert() {
     }
 
- 
     public SupplierRiskAlert(Long supplierId, String alertType,
                              String description, String alertLevel) {
         this.supplierId = supplierId;
@@ -27,6 +26,22 @@ public class SupplierRiskAlert {
         this.description = description;
         this.alertLevel = alertLevel;
     }
+
+    // --- ADD THESE ALIAS METHODS TO PASS THE TESTS ---
+
+    /**
+     * This fixes the "cannot find symbol: method getRiskLevel()" error.
+     * It maps the test's request for 'RiskLevel' to your 'alertLevel' field.
+     */
+    public String getRiskLevel() { 
+        return this.alertLevel; 
+    }
+
+    public void setRiskLevel(String riskLevel) { 
+        this.alertLevel = riskLevel; 
+    }
+
+    // -------------------------------------------------
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
