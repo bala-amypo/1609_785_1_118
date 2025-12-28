@@ -47,11 +47,11 @@
 //         return http.build();
 //     }
 // }
+
 package com.example.demo.config;
 
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtAuthenticationFilter;
-import jakarta.servlet.DispatcherType; // ✅ NEW IMPORT
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -94,14 +94,12 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                // ✅ FIX 1: Allow internal forwards and error types (Stops 403 on error page)
-                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                
-                // ✅ FIX 2: More robust matching for /auth regardless of /api/api prefix
+                // ✅ UNIVERSAL FIX: Match any URL that contains "/auth/"
+                // This covers /api/auth, /api/api/auth, and /auth
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/**/auth/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/error")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/v3/api-docs/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/swagger-ui/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/error")).permitAll()
                 
                 .anyRequest().authenticated()
             )
@@ -143,7 +141,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
