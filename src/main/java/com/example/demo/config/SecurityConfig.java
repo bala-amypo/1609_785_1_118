@@ -96,7 +96,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // ✅ UNIVERSAL FIX: Match any URL that contains "/auth/"
                 // This covers /api/auth, /api/api/auth, and /auth
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/auth/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/auth/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/**/v3/api-docs/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/**/swagger-ui/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/**/error")).permitAll()
