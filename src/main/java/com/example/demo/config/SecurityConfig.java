@@ -54,6 +54,7 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -70,6 +71,7 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
+    @Lazy // Use @Lazy to prevent Circular Dependency (500 Error)
     private JwtAuthenticationFilter jwtFilter;
 
     @Bean
@@ -85,30 +87,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) 
+            .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(List.of("*"));
                 cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 cfg.setAllowedHeaders(List.of("*"));
+                cfg.setExposedHeaders(List.of("Authorization"));
                 return cfg;
             }))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // UPDATED MATCHERS: Added **/ prefix to handle the /api prefix from your proxy
-                .requestMatchers(
-                    "/auth/**", 
-                    "/api/auth/**",  // This fixes your specific 403 error
-                    "**/auth/**",
-                    "/v3/api-docs/**", 
-                    "/api/v3/api-docs/**",
-                    "/swagger-ui/**", 
-                    "/api/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/webjars/**"
-                ).permitAll()
+                // Allow EVERYTHING related to Auth and Swagger
+                .requestMatchers("/auth/**", "/api/auth/**", "**/auth/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/api/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
             )
+            // Add the filter
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
