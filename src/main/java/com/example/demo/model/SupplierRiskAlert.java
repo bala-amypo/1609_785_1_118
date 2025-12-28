@@ -61,3 +61,8 @@ public class SupplierRiskAlert {
     public String getAlertLevel() { return alertLevel; }
     public void setAlertLevel(String alertLevel) { this.alertLevel = alertLevel; }
 }
+
+
+
+// public String getRiskLevel() { return this.alertLevel; }
+// public void setRiskLevel(String riskLevel) { this.alertLevel = riskLevel; }
