@@ -63,6 +63,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+
 import java.util.List;
 
 @Configuration
@@ -71,7 +72,6 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtFilter;
 
-    // FIX: Resolves the "required a bean of type PasswordEncoder" error
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -85,7 +85,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Crucial for Swagger POST
+            .csrf(csrf -> csrf.disable()) 
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(List.of("*"));
@@ -95,12 +95,16 @@ public class SecurityConfig {
             }))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Allow all Swagger paths
+                // UPDATED MATCHERS: Added **/ prefix to handle the /api prefix from your proxy
                 .requestMatchers(
                     "/auth/**", 
+                    "/api/auth/**",  // This fixes your specific 403 error
+                    "**/auth/**",
                     "/v3/api-docs/**", 
+                    "/api/v3/api-docs/**",
                     "/swagger-ui/**", 
-                    "/swagger-ui.html", 
+                    "/api/swagger-ui/**",
+                    "/swagger-ui.html",
                     "/webjars/**"
                 ).permitAll()
                 .anyRequest().authenticated()
