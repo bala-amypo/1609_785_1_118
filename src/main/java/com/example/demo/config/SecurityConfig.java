@@ -51,6 +51,7 @@ package com.example.demo.config;
 
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtAuthenticationFilter;
+import jakarta.servlet.DispatcherType; // ✅ NEW IMPORT
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -82,7 +83,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AppUserRepository userRepository;
 
-    // ✅ Use @Lazy to break the circular dependency cycle
     public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthFilter, AppUserRepository userRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userRepository = userRepository;
@@ -94,11 +94,15 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                // ✅ Use "**/auth/**" to handle /auth, /api/auth, and /api/api/auth automatically
-                .requestMatchers(AntPathRequestMatcher.antMatcher("**/auth/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("**/v3/api-docs/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("**/swagger-ui/**")).permitAll()
+                // ✅ FIX 1: Allow internal forwards and error types (Stops 403 on error page)
+                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                
+                // ✅ FIX 2: More robust matching for /auth regardless of /api/api prefix
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/auth/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/error")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
+                
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
