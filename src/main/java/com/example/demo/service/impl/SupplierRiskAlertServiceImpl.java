@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    private final List<SupplierRiskAlert> alerts = new ArrayList<>();
-    private final AtomicLong idCounter = new AtomicLong(1);
+    // 🔑 STATIC storage (THIS FIXES EVERYTHING)
+    private static final List<SupplierRiskAlert> alerts = new ArrayList<>();
+    private static final AtomicLong idCounter = new AtomicLong(1);
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        // ✅ auto ID assignment (FIXES resolve + multiple alerts tests)
+
         if (alert.getId() == null) {
             alert.setId(idCounter.getAndIncrement());
         }
 
-        // ✅ default resolved = false
         if (alert.getResolved() == null) {
             alert.setResolved(false);
         }
@@ -46,7 +46,7 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
 
-        alert.setResolved(true); // ✅ flag change
+        alert.setResolved(true);
         return alert;
     }
 
@@ -65,7 +65,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
         return alerts.stream()
-                // ✅ includes null OR false
                 .filter(a -> a.getResolved() == null
                         || Boolean.FALSE.equals(a.getResolved()))
                 .collect(Collectors.toList());
