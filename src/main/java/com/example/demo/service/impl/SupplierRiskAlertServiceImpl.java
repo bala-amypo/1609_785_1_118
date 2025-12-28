@@ -80,29 +80,25 @@
 //         idCounter.set(1);
 //     }
 // }
-
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierRiskAlert;
-import com.example.demo.repository.SupplierRiskAlertRepository;
+import com.example.demo.repository.RiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Autowired
-    private SupplierRiskAlertRepository riskAlertRepository;
+    private RiskAlertRepository riskAlertRepository;
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
-        if (alert.getResolved() == null) {
-            alert.setResolved(false);
-        }
+        if (alert.getResolved() == null) alert.setResolved(false);
         return riskAlertRepository.save(alert);
     }
 
@@ -113,10 +109,8 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
-        // This now uses the repository, so Mockito's findById() stub will work!
         SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
-
         alert.setResolved(true);
         return riskAlertRepository.save(alert);
     }
@@ -134,7 +128,6 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public List<SupplierRiskAlert> getAlertsByRisk(String risk) {
         if (risk == null) return List.of();
-        // Uses the database field alertLevel
         return riskAlertRepository.findByAlertLevel(risk.trim().toUpperCase());
     }
 
