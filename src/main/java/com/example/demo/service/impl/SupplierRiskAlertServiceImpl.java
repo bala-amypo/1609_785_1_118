@@ -75,3 +75,5 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
         return new ArrayList<>(alerts);
     }
 }
+mkdir -p src/test/java/com/example/demo
+touch src/test/java/com/example/demo/ResultListener.java
