@@ -81,9 +81,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthFilter, UserRepository userRepository) {
+    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthFilter, AppUserRepository userRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userRepository = userRepository;
     }
