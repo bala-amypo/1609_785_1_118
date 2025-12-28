@@ -50,14 +50,22 @@
 
 package com.example.demo.config;
 
-import com.example.demo.security.JwtAuthenticationFilter; // Your JWT filter class
+import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -72,57 +80,66 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+    private final UserRepository userRepository; // Inject Repository directly
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, UserRepository userRepository) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.authenticationProvider = authenticationProvider;
+        this.userRepository = userRepository;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Disable CSRF (Common for JWT/Stateless APIs)
             .csrf(AbstractHttpConfigurer::disable)
-            
-            // 2. Enable CORS (Matches your Nginx 'access-control-allow-origin: *' header)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-            // 3. Configure Authorization Rules
             .authorizeHttpRequests(auth -> auth
-                // ✅ FIX: Use AntPathRequestMatcher to prevent the "No more pattern data allowed" error
+                // ✅ FIX 1: AntPathRequestMatcher fixes the "No more pattern data allowed" 500 error
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/auth/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/public/**")).permitAll()
-                
-                // Secure everything else
                 .anyRequest().authenticated()
             )
-
-            // 4. Set Session Management to STATELESS (Essential for JWT)
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
-            // 5. Link your Authentication Provider (where password encoding happens)
-            .authenticationProvider(authenticationProvider)
-
-            // 6. Add JWT Filter before the standard UsernamePassword filter
+            .authenticationProvider(authenticationProvider()) // Use the bean defined below
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // CORS Configuration to resolve browser errors
+    // ✅ FIX 2: Define the missing AuthenticationProvider bean here since you can't create a new file
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // Change to specific domain in production
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));
-        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
