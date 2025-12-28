@@ -70,11 +70,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "supplier_risk_alert")
 public class SupplierRiskAlert {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long supplierId;
     private String alertType;
     private String description;
@@ -83,15 +81,11 @@ public class SupplierRiskAlert {
 
     public SupplierRiskAlert() {}
 
-    // --- ALIAS METHODS (Correct) ---
-    public String getRiskLevel() { 
-        return this.alertLevel; 
-    }
-    public void setRiskLevel(String riskLevel) { 
-        this.alertLevel = riskLevel; 
-    }
-    // -------------------------------
+    // ALIAS METHODS: Required to pass tests calling getRiskLevel/setRiskLevel
+    public String getRiskLevel() { return this.alertLevel; }
+    public void setRiskLevel(String riskLevel) { this.alertLevel = riskLevel; }
 
+    // Standard Getters/Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Long getSupplierId() { return supplierId; }
@@ -105,4 +99,3 @@ public class SupplierRiskAlert {
     public String getAlertLevel() { return alertLevel; }
     public void setAlertLevel(String alertLevel) { this.alertLevel = alertLevel; }
 }
-
