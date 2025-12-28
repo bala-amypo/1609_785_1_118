@@ -68,6 +68,7 @@ package com.example.demo.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -84,10 +85,16 @@ public class SwaggerConfig {
         final String securitySchemeName = "bearerAuth";
 
         return new OpenAPI()
-                // 1. Add global security requirement so all endpoints require JWT
+                // 1. Metadata for the UI
+                .info(new Info()
+                        .title("Demo API")
+                        .version("1.0")
+                        .description("Spring Boot 3 JWT Authentication API"))
+                
+                // 2. Global "Authorize" button
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 
-                // 2. Define the JWT Bearer token security scheme
+                // 3. Define the Security Scheme
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
@@ -96,9 +103,11 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
                 
-                // 3. Define the server URL (matches your /api prefix)
+                // 4. Server Configuration
+                // IMPORTANT: If your proxy handles the "/api" prefix, keep it. 
+                // If not, use the base URL.
                 .servers(List.of(
-                        new Server().url("https://9133.pro604cr.amypo.ai/api")
+                        new Server().url("https://9133.pro604cr.amypo.ai/").description("Default Server")
                 ));
     }
 }
