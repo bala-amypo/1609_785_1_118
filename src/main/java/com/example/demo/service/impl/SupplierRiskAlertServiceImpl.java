@@ -84,7 +84,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SupplierRiskAlert;
-import com.example.demo.repository.RiskAlertRepository;
+import com.example.demo.repository.SupplierRiskAlertRepository;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,7 +94,7 @@ import java.util.List;
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Autowired
-    private RiskAlertRepository riskAlertRepository;
+    private SupplierRiskAlertRepository riskAlertRepository;
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
