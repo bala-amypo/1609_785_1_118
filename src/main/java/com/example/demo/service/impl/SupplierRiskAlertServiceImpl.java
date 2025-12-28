@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +12,21 @@ import java.util.stream.Collectors;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
-    private static final List<SupplierRiskAlert> alerts = new ArrayList<>();
-    private static final AtomicLong idCounter = new AtomicLong(1);
+
+    // ✅ NON-STATIC: Each instance has its own list for tests
+    private final List<SupplierRiskAlert> alerts = new ArrayList<>();
+    private final AtomicLong idCounter = new AtomicLong(1);
 
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
         if (alert.getId() == null) {
             alert.setId(idCounter.getAndIncrement());
         }
+
         if (alert.getResolved() == null) {
             alert.setResolved(false);
         }
+
         alerts.add(alert);
         return alert;
     }
@@ -40,6 +44,7 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
                 .filter(a -> a.getId() != null && a.getId().equals(alertId))
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
+
         alert.setResolved(true);
         return alert;
     }
@@ -47,9 +52,12 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public List<SupplierRiskAlert> getAlertsByLevel(String level) {
         if (level == null) return List.of();
+
         String search = level.toLowerCase();
+
         return alerts.stream()
-                .filter(a -> a.getAlertLevel() != null && a.getAlertLevel().toLowerCase().contains(search))
+                .filter(a -> a.getAlertLevel() != null &&
+                        a.getAlertLevel().toLowerCase().contains(search))
                 .collect(Collectors.toList());
     }
 
@@ -63,5 +71,11 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
         return new ArrayList<>(alerts);
+    }
+
+    // Optional helper to clear all alerts (useful in unit tests)
+    public void clearAllAlerts() {
+        alerts.clear();
+        idCounter.set(1);
     }
 }
