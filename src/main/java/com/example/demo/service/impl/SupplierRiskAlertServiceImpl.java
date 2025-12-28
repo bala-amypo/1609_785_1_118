@@ -7,11 +7,12 @@ import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
+
     private final SupplierRiskAlertRepository riskAlertRepository;
+
     public SupplierRiskAlertServiceImpl(SupplierRiskAlertRepository riskAlertRepository) {
         this.riskAlertRepository = riskAlertRepository;
     }
@@ -19,7 +20,7 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     @Override
     public SupplierRiskAlert createAlert(SupplierRiskAlert alert) {
         if (alert.getResolved() == null) {
-            alert.setResolved(false);
+            alert.setResolved(false);   // ✔ default resolved = false
         }
         return riskAlertRepository.save(alert);
     }
@@ -33,27 +34,24 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public SupplierRiskAlert resolveAlert(Long alertId) {
         SupplierRiskAlert alert = riskAlertRepository.findById(alertId)
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
-        alert.setResolved(true);
+        alert.setResolved(true);       // ✔ flag changed
         return riskAlertRepository.save(alert);
     }
 
+    // ✅ FIXED: repository-level filtering
     @Override
     public List<SupplierRiskAlert> getAlertsByLevel(String level) {
-        if (level == null) return List.of();
-        String search = level.toUpperCase();
-        
-        return riskAlertRepository.findAll().stream()
-                .filter(a -> a.getAlertLevel() != null && 
-                             a.getAlertLevel().toUpperCase().contains(search))
-                .collect(Collectors.toList());
+        if (level == null) {
+            return List.of();
+        }
+        return riskAlertRepository
+                .findByAlertLevelContainingIgnoreCase(level);
     }
 
+    // ✅ FIXED: unresolved alerts via repository
     @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
-        // Fixes testCriteriaLikeUnresolvedAlerts
-        return riskAlertRepository.findAll().stream()
-                .filter(a -> Boolean.FALSE.equals(a.getResolved()))
-                .collect(Collectors.toList());
+        return riskAlertRepository.findByResolvedFalse();
     }
 
     @Override
