@@ -5,16 +5,16 @@ import com.example.demo.model.SupplierRiskAlert;
 import com.example.demo.service.SupplierRiskAlertService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
 public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
-    // ✅ NON-STATIC: Each instance has its own list for tests
-    private final List<SupplierRiskAlert> alerts = new ArrayList<>();
+    // Thread-safe list for concurrent test cases
+    private final List<SupplierRiskAlert> alerts = new CopyOnWriteArrayList<>();
     private final AtomicLong idCounter = new AtomicLong(1);
 
     @Override
@@ -33,15 +33,16 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
 
     @Override
     public List<SupplierRiskAlert> getAlertsBySupplier(Long supplierId) {
+        if (supplierId == null) return List.of();
         return alerts.stream()
-                .filter(a -> a.getSupplierId() != null && a.getSupplierId().equals(supplierId))
+                .filter(a -> supplierId.equals(a.getSupplierId()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public SupplierRiskAlert resolveAlert(Long alertId) {
         SupplierRiskAlert alert = alerts.stream()
-                .filter(a -> a.getId() != null && a.getId().equals(alertId))
+                .filter(a -> alertId.equals(a.getId()))
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("Alert not found"));
 
@@ -53,27 +54,27 @@ public class SupplierRiskAlertServiceImpl implements SupplierRiskAlertService {
     public List<SupplierRiskAlert> getAlertsByLevel(String level) {
         if (level == null) return List.of();
 
-        String search = level.toLowerCase();
+        String search = level.trim().toLowerCase();
 
         return alerts.stream()
                 .filter(a -> a.getAlertLevel() != null &&
-                        a.getAlertLevel().toLowerCase().contains(search))
+                        a.getAlertLevel().trim().toLowerCase().equals(search))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<SupplierRiskAlert> getUnresolvedAlerts() {
         return alerts.stream()
-                .filter(a -> a.getResolved() == null || Boolean.FALSE.equals(a.getResolved()))
+                .filter(a -> a.getResolved() == null || !a.getResolved())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<SupplierRiskAlert> getAllAlerts() {
-        return new ArrayList<>(alerts);
+        return List.copyOf(alerts);
     }
 
-    // Optional helper to clear all alerts (useful in unit tests)
+    // Optional helper for unit tests
     public void clearAllAlerts() {
         alerts.clear();
         idCounter.set(1);
