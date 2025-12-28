@@ -141,47 +141,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                    HttpServletResponse response, 
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+            throws ServletException, IOException {
         try {
-            // 1. Get the Authorization Header
-            String authHeader = request.getHeader("Authorization");
-            String jwt = null;
-            String username = null;
+            final String authHeader = request.getHeader("Authorization");
+            final String jwt;
+            final String username;
 
-            // 2. Check if the header is present and starts with Bearer
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                jwt = authHeader.substring(7);
-                
-                // 3. Extract username (ensure your TokenProvider handles null/invalid tokens gracefully)
-                username = jwtTokenProvider.extractUsername(jwt);
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
             }
 
-            // 4. If we have a username and the user is not yet authenticated
+            jwt = authHeader.substring(7);
+            username = jwtTokenProvider.extractUsername(jwt); // Will compile now
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-                // 5. If the token is valid, set the security context
-                if (jwtTokenProvider.isTokenValid(jwt, userDetails)) {
+                
+                if (jwtTokenProvider.isTokenValid(jwt, userDetails)) { // Will compile now
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, 
-                            null, 
-                            userDetails.getAuthorities()
-                    );
+                            userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    
-                    // Set the user as authenticated
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
         } catch (Exception e) {
-            // Log the error for debugging but don't stop the filter chain
-            // This prevents the "500 Internal Server Error" if a token is malformed
-            System.out.println("JWT Authentication Error: " + e.getMessage());
+            System.out.println("JWT Error: " + e.getMessage());
         }
-
-        // 6. Always continue the filter chain
         filterChain.doFilter(request, response);
     }
 }
