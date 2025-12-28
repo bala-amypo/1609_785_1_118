@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RiskAlertRepository extends JpaRepository<SupplierRiskAlert, Long> {
+public interface SupplierRiskAlertRepository extends JpaRepository<SupplierRiskAlert, Long> {
     List<SupplierRiskAlert> findBySupplierId(Long supplierId);
     List<SupplierRiskAlert> findByResolved(Boolean resolved);
     // This supports getHighRiskAlerts and getAlertsByRisk
