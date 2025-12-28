@@ -63,15 +63,15 @@
 // }
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.ApiResponse;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AppUser;
-import com.example.demo.model.Role;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
-import com.example.demo.exception.BadRequestException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -108,21 +108,12 @@ public class AuthServiceImpl implements AuthService {
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-
-        // ✅ PASSWORD MUST BE ENCODED
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        // ✅ FIX: String → Enum
-        try {
-            user.setRole(Role.valueOf(request.getRole()));
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Invalid role: " + request.getRole());
-        }
+        user.setRole(request.getRole()); // ✅ FIXED
 
         userRepository.save(user);
 
         String token = jwtTokenProvider.generateToken(user);
-
         return new ApiResponse("User registered successfully", token);
     }
 
