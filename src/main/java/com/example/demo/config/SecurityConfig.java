@@ -69,7 +69,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -94,13 +93,23 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                // ✅ UNIVERSAL FIX: Match any URL that contains "/auth/"
-                // This covers /api/auth, /api/api/auth, and /auth
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/auth/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/v3/api-docs/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/swagger-ui/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/**/error")).permitAll()
+                // ✅ 1. Allow Public Auth Endpoints
+                .requestMatchers("/auth/**").permitAll()
                 
+                // ✅ 2. Allow ALL Swagger UI and OpenAPI components
+                // Missing any of these usually causes the 403 error
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/v3/api-docs.yaml",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/webjars/**",
+                    "/swagger-resources/**",
+                    "/configuration/ui",
+                    "/configuration/security"
+                ).permitAll()
+                
+                // ✅ 3. Secure everything else
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
