@@ -1,3 +1,116 @@
+// // // // package com.example.demo.security;
+
+// // // // import jakarta.servlet.FilterChain;
+// // // // import jakarta.servlet.ServletException;
+// // // // import jakarta.servlet.http.HttpServletRequest;
+// // // // import jakarta.servlet.http.HttpServletResponse;
+// // // // import org.springframework.beans.factory.annotation.Autowired;
+// // // // import org.springframework.stereotype.Component;
+// // // // import org.springframework.web.filter.OncePerRequestFilter;
+// // // // import org.springframework.security.core.context.SecurityContextHolder;
+// // // // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+// // // // import java.io.IOException;
+
+// // // // @Component
+// // // // public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+// // // //     @Autowired
+// // // //     private JwtTokenProvider jwtTokenProvider;
+
+// // // //     @Autowired
+// // // //     private CustomUserDetailsService userDetailsService; // Your UserDetailsService
+
+// // // //     @Override
+// // // //     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
+// // // //                                   FilterChain filterChain) throws ServletException, IOException {
+// // // //         String token = getTokenFromRequest(request);
+
+// // // //         if (token != null && jwtTokenProvider.validateToken(token)) {
+// // // //             // Extract username from JWT
+// // // //             String username = jwtTokenProvider.getUsernameFromToken(token);
+
+// // // //             // Load user details
+// // // //             var userDetails = userDetailsService.loadUserByUsername(username);
+
+// // // //             // Create Authentication object
+// // // //             UsernamePasswordAuthenticationToken auth =
+// // // //                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+// // // //             // Set authentication in SecurityContext
+// // // //             SecurityContextHolder.getContext().setAuthentication(auth);
+// // // //         }
+
+// // // //         filterChain.doFilter(request, response);
+// // // //     }
+
+// // // //     private String getTokenFromRequest(HttpServletRequest request) {
+// // // //         String bearerToken = request.getHeader("Authorization");
+// // // //         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+// // // //             return bearerToken.substring(7);
+// // // //         }
+// // // //         return null;
+// // // //     }
+// // // // }
+// // // // package com.example.demo.security;
+
+// // // // import jakarta.servlet.FilterChain;
+// // // // import jakarta.servlet.ServletException;
+// // // // import jakarta.servlet.http.HttpServletRequest;
+// // // // import jakarta.servlet.http.HttpServletResponse;
+// // // // import org.springframework.beans.factory.annotation.Autowired;
+// // // // import org.springframework.stereotype.Component;
+// // // // import org.springframework.web.filter.OncePerRequestFilter;
+// // // // import org.springframework.security.core.context.SecurityContextHolder;
+// // // // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+// // // // import java.io.IOException;
+
+// // // // @Component
+// // // // public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+// // // //     @Autowired
+// // // //     private JwtTokenProvider jwtTokenProvider;
+
+// // // //     @Autowired
+// // // //     private CustomUserDetailsService userDetailsService;
+
+// // // //     @Override
+// // // //     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+// // // //                                     FilterChain filterChain) throws ServletException, IOException {
+
+// // // //         String path = request.getRequestURI();
+
+// // // //         // ✅ Skip JWT validation for public endpoints
+// // // //         if (path.startsWith("/auth/") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+// // // //             filterChain.doFilter(request, response);
+// // // //             return;
+// // // //         }
+
+// // // //         String token = getTokenFromRequest(request);
+
+// // // //         if (token != null && jwtTokenProvider.validateToken(token)) {
+// // // //             String username = jwtTokenProvider.getUsernameFromToken(token);
+
+// // // //             var userDetails = userDetailsService.loadUserByUsername(username);
+
+// // // //             UsernamePasswordAuthenticationToken auth =
+// // // //                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+// // // //             SecurityContextHolder.getContext().setAuthentication(auth);
+// // // //         }
+
+// // // //         filterChain.doFilter(request, response);
+// // // //     }
+
+// // // //     private String getTokenFromRequest(HttpServletRequest request) {
+// // // //         String bearerToken = request.getHeader("Authorization");
+// // // //         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+// // // //             return bearerToken.substring(7);
+// // // //         }
+// // // //         return null;
+// // // //     }
+// // // // }
 // // // package com.example.demo.security;
 
 // // // import jakarta.servlet.FilterChain;
@@ -5,10 +118,13 @@
 // // // import jakarta.servlet.http.HttpServletRequest;
 // // // import jakarta.servlet.http.HttpServletResponse;
 // // // import org.springframework.beans.factory.annotation.Autowired;
+// // // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+// // // import org.springframework.security.core.context.SecurityContextHolder;
+// // // import org.springframework.security.core.userdetails.UserDetails;
+// // // import org.springframework.security.core.userdetails.UserDetailsService;
+// // // import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 // // // import org.springframework.stereotype.Component;
 // // // import org.springframework.web.filter.OncePerRequestFilter;
-// // // import org.springframework.security.core.context.SecurityContextHolder;
-// // // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 // // // import java.io.IOException;
 
@@ -19,233 +135,177 @@
 // // //     private JwtTokenProvider jwtTokenProvider;
 
 // // //     @Autowired
-// // //     private CustomUserDetailsService userDetailsService; // Your UserDetailsService
+// // //     private UserDetailsService userDetailsService;
 
 // // //     @Override
-// // //     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
-// // //                                   FilterChain filterChain) throws ServletException, IOException {
-// // //         String token = getTokenFromRequest(request);
+// // //     protected void doFilterInternal(
+// // //             HttpServletRequest request,
+// // //             HttpServletResponse response,
+// // //             FilterChain filterChain)
+// // //             throws ServletException, IOException {
 
-// // //         if (token != null && jwtTokenProvider.validateToken(token)) {
-// // //             // Extract username from JWT
-// // //             String username = jwtTokenProvider.getUsernameFromToken(token);
+// // //         String path = request.getServletPath();
 
-// // //             // Load user details
-// // //             var userDetails = userDetailsService.loadUserByUsername(username);
-
-// // //             // Create Authentication object
-// // //             UsernamePasswordAuthenticationToken auth =
-// // //                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-// // //             // Set authentication in SecurityContext
-// // //             SecurityContextHolder.getContext().setAuthentication(auth);
-// // //         }
-
-// // //         filterChain.doFilter(request, response);
-// // //     }
-
-// // //     private String getTokenFromRequest(HttpServletRequest request) {
-// // //         String bearerToken = request.getHeader("Authorization");
-// // //         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-// // //             return bearerToken.substring(7);
-// // //         }
-// // //         return null;
-// // //     }
-// // // }
-// // // package com.example.demo.security;
-
-// // // import jakarta.servlet.FilterChain;
-// // // import jakarta.servlet.ServletException;
-// // // import jakarta.servlet.http.HttpServletRequest;
-// // // import jakarta.servlet.http.HttpServletResponse;
-// // // import org.springframework.beans.factory.annotation.Autowired;
-// // // import org.springframework.stereotype.Component;
-// // // import org.springframework.web.filter.OncePerRequestFilter;
-// // // import org.springframework.security.core.context.SecurityContextHolder;
-// // // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-// // // import java.io.IOException;
-
-// // // @Component
-// // // public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-// // //     @Autowired
-// // //     private JwtTokenProvider jwtTokenProvider;
-
-// // //     @Autowired
-// // //     private CustomUserDetailsService userDetailsService;
-
-// // //     @Override
-// // //     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-// // //                                     FilterChain filterChain) throws ServletException, IOException {
-
-// // //         String path = request.getRequestURI();
-
-// // //         // ✅ Skip JWT validation for public endpoints
-// // //         if (path.startsWith("/auth/") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+// // //         // ✅ IMPORTANT: Skip JWT check for Auth and Swagger paths
+// // //         // This ensures the filter doesn't block "permitAll" URLs
+// // //         if (path.contains("/auth") || 
+// // //             path.contains("/swagger-ui") || 
+// // //             path.contains("/v3/api-docs") || 
+// // //             path.contains("/webjars")) {
 // // //             filterChain.doFilter(request, response);
 // // //             return;
 // // //         }
 
-// // //         String token = getTokenFromRequest(request);
+// // //         String authHeader = request.getHeader("Authorization");
 
-// // //         if (token != null && jwtTokenProvider.validateToken(token)) {
-// // //             String username = jwtTokenProvider.getUsernameFromToken(token);
+// // //         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+// // //             filterChain.doFilter(request, response);
+// // //             return;
+// // //         }
 
-// // //             var userDetails = userDetailsService.loadUserByUsername(username);
+// // //         String jwt = authHeader.substring(7);
+// // //         String username;
 
-// // //             UsernamePasswordAuthenticationToken auth =
-// // //                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+// // //         try {
+// // //             username = jwtTokenProvider.extractUsername(jwt);
+// // //         } catch (Exception e) {
+// // //             // Token invalid or expired, move to next filter
+// // //             filterChain.doFilter(request, response);
+// // //             return;
+// // //         }
 
-// // //             SecurityContextHolder.getContext().setAuthentication(auth);
+// // //         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+// // //             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+// // //             if (jwtTokenProvider.isTokenValid(jwt, userDetails)) {
+// // //                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+// // //                                 userDetails, null, userDetails.getAuthorities());
+
+// // //                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+// // //                 SecurityContextHolder.getContext().setAuthentication(authToken);
+// // //             }
 // // //         }
 
 // // //         filterChain.doFilter(request, response);
 // // //     }
-
-// // //     private String getTokenFromRequest(HttpServletRequest request) {
-// // //         String bearerToken = request.getHeader("Authorization");
-// // //         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-// // //             return bearerToken.substring(7);
-// // //         }
-// // //         return null;
-// // //     }
 // // // }
-// // package com.example.demo.security;
+// package com.example.demo.security;
 
-// // import jakarta.servlet.FilterChain;
-// // import jakarta.servlet.ServletException;
-// // import jakarta.servlet.http.HttpServletRequest;
-// // import jakarta.servlet.http.HttpServletResponse;
-// // import org.springframework.beans.factory.annotation.Autowired;
-// // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-// // import org.springframework.security.core.context.SecurityContextHolder;
-// // import org.springframework.security.core.userdetails.UserDetails;
-// // import org.springframework.security.core.userdetails.UserDetailsService;
-// // import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-// // import org.springframework.stereotype.Component;
-// // import org.springframework.web.filter.OncePerRequestFilter;
+// import jakarta.servlet.FilterChain;
+// import jakarta.servlet.ServletException;
+// import jakarta.servlet.http.HttpServletRequest;
+// import jakarta.servlet.http.HttpServletResponse;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+// import org.springframework.security.core.context.SecurityContextHolder;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.UserDetailsService;
+// import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+// import org.springframework.stereotype.Component;
+// import org.springframework.web.filter.OncePerRequestFilter;
 
-// // import java.io.IOException;
+// import java.io.IOException;
 
-// // @Component
-// // public class JwtAuthenticationFilter extends OncePerRequestFilter {
+// @Component
+// public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-// //     @Autowired
-// //     private JwtTokenProvider jwtTokenProvider;
+//     @Autowired private JwtTokenProvider jwtTokenProvider;
+//     @Autowired private UserDetailsService userDetailsService;
 
-// //     @Autowired
-// //     private UserDetailsService userDetailsService;
+//     @Override
+//     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//             throws ServletException, IOException {
 
-// //     @Override
-// //     protected void doFilterInternal(
-// //             HttpServletRequest request,
-// //             HttpServletResponse response,
-// //             FilterChain filterChain)
-// //             throws ServletException, IOException {
+//         String path = request.getServletPath();
 
-// //         String path = request.getServletPath();
+//         // ✅ BYPASS SECURITY FOR SWAGGER AND AUTH
+//         if (path.contains("/auth") || path.contains("/v3/api-docs") || path.contains("/swagger-ui")) {
+//             filterChain.doFilter(request, response);
+//             return;
+//         }
 
-// //         // ✅ IMPORTANT: Skip JWT check for Auth and Swagger paths
-// //         // This ensures the filter doesn't block "permitAll" URLs
-// //         if (path.contains("/auth") || 
-// //             path.contains("/swagger-ui") || 
-// //             path.contains("/v3/api-docs") || 
-// //             path.contains("/webjars")) {
-// //             filterChain.doFilter(request, response);
-// //             return;
-// //         }
+//         String authHeader = request.getHeader("Authorization");
+//         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//             filterChain.doFilter(request, response);
+//             return;
+//         }
 
-// //         String authHeader = request.getHeader("Authorization");
+//         String jwt = authHeader.substring(7);
+//         try {
+//             String username = jwtTokenProvider.extractUsername(jwt);
+//             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//                 if (jwtTokenProvider.isTokenValid(jwt, userDetails)) {
+//                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                             userDetails, null, userDetails.getAuthorities());
+//                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                     SecurityContextHolder.getContext().setAuthentication(authToken);
+//                 }
+//             }
+//         } catch (Exception e) {
+//             // Silently fail authentication for invalid tokens
+//         }
 
-// //         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-// //             filterChain.doFilter(request, response);
-// //             return;
-// //         }
+//         filterChain.doFilter(request, response);
+//     }
+// }
+package com.example.demo.config;
 
-// //         String jwt = authHeader.substring(7);
-// //         String username;
+import com.example.demo.security.JwtAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// //         try {
-// //             username = jwtTokenProvider.extractUsername(jwt);
-// //         } catch (Exception e) {
-// //             // Token invalid or expired, move to next filter
-// //             filterChain.doFilter(request, response);
-// //             return;
-// //         }
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
 
-// //         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-// //             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
-// //             if (jwtTokenProvider.isTokenValid(jwt, userDetails)) {
-// //                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-// //                                 userDetails, null, userDetails.getAuthorities());
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
-// //                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-// //                 SecurityContextHolder.getContext().setAuthentication(authToken);
-// //             }
-// //         }
+    // ✅ FIX: Define the AuthenticationManager bean for AuthServiceImpl
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-// //         filterChain.doFilter(request, response);
-// //     }
-// // }
-package com.example.demo.security;
+    // ✅ FIX: Define PasswordEncoder bean (usually required for AuthServices)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                // ✅ SWAGGER & AUTH: Public access
+                .requestMatchers("/api/auth/**", "/auth/**").permitAll()
+                .requestMatchers(
+                    "/v3/api-docs/**", 
+                    "/v3/api-docs.yaml", 
+                    "/swagger-ui/**", 
+                    "/swagger-ui.html", 
+                    "/webjars/**"
+                ).permitAll()
+                // ✅ PROTECTED: Everything else
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-import java.io.IOException;
-
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    @Autowired private JwtTokenProvider jwtTokenProvider;
-    @Autowired private UserDetailsService userDetailsService;
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
-        String path = request.getServletPath();
-
-        // ✅ BYPASS SECURITY FOR SWAGGER AND AUTH
-        if (path.contains("/auth") || path.contains("/v3/api-docs") || path.contains("/swagger-ui")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String jwt = authHeader.substring(7);
-        try {
-            String username = jwtTokenProvider.extractUsername(jwt);
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                if (jwtTokenProvider.isTokenValid(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            }
-        } catch (Exception e) {
-            // Silently fail authentication for invalid tokens
-        }
-
-        filterChain.doFilter(request, response);
+        return http.build();
     }
 }
